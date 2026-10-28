@@ -1,0 +1,175 @@
+; A. Description
+;    A list of commands here configures ADC and generates non-maskable multiple capture interrupt through timer1 trigger sources.
+;
+; B. Preparation
+;    Connecting target port with a suitable instrument.
+;
+; C. Prerequisite Example (abov_example_config.h)
+;    1. ADC
+;    2. Timer1
+;    3. PCU/GPIO
+;
+; D. Default Port
+;    1. ADC0    : PA5 (AN8/adc_ch8)
+;    2. Timer12 : PD12 (Output/Capture Input/External Clock Input)
+;
+; E. Port Connection
+;    1. PD12 (Timer12 Output) ----> PA5 (AN8/adc_ch8)
+;
+; For more information, read a user's manual of the target device carefully.
+;
+; ADC0
+; 1. Channel                   : 0
+;
+; 2. Clock                      : [ 0 p 64 ]
+;    Source                     : p (Periperhal Clock)
+;    Peripheral Clock Divide    : 64
+;
+; 3. Config                    : [ config 0 n m 1 8 0 ]
+;    Operation                 : n (Non Maskable Interrupt)
+;    Mode                      : m (Multiple)
+;    Base Trigger Source       : 1 (Timer1)
+;    Sequence Count            : 8
+;    Sampling Time             : 0
+;
+; 4. Seq                       : [ 0 1 0 0 8 ]
+;    Trigger Source            : 1 (Timer1)
+;    Trigger Source Number     : 0 (Timer10)
+;    Sequence Number           : 0
+;    Input Channel             : 8
+;
+; Timer1n
+; 1. Channel                   : 0 / 1 / 2 (Timer1n)
+;
+; 2. Clock                     : [ 0 m h 10 1000 ] [ 1 m h 10 1000 ] [ 2 m h 10 1000 ]
+;    Source                    : m (MCCR : Misc Clock)
+;    MCCR Source               : h (HSI : High Speed Internal Clock - 32MHz)
+;    Source Divide             : 10
+;    Timer1 Pre-Divide         : 1000 (MCCR Clock / 10) / 1000
+;
+; 3. Config                    : [ 0 i p h 320 320 -io o ] [ 1 i p h 960 960 -io o ] [ 2 i p h 640 640 -io o ]
+;    Operation                 : i (Interrupt)
+;    Mode                      : p (Period)
+;    Output Port Polarity      : h (High)
+;    A Data                    : 320/960/640
+;    B Data                    : 320/960/640
+;    Port In/Out (-io)         : o (Output)
+;
+; 4. Adc Trigger Config        : [ 0 e n ] [ 1 e n ] [ 2 e n ]
+;    Enable                    : e (Enable)
+;    Mode                      : n (Normal)
+;
+; PCU (PA)
+; 1. Port Group                : 0 (PCU Port A)
+;
+; 2. Port                      : [ 0 5 a 7 ]
+;    Pin Number                : 5
+;    Pin Mode                  : a (Alternative)
+;    Alternative               : 7 (AN5(adc_ch8))
+; 
+; PCU (PD)
+; 1. Port Group                : 3 (PCU Port D)
+;
+; 2. Port                      : [ 3 12 a 2 ]
+;    Pin Number                : 12
+;    Pin Mode                  : a (Alternative)
+;    Alternative               : 2 (T2IO)
+; 
+; PCU (PA)
+sendln 'cm pcu'
+mpause 30
+sendln 'port 0 5 a 7'
+mpause 30
+
+; PCU (PD)
+sendln 'port 3 12 a 2'
+mpause 30
+
+; Timer10
+sendln 'cm timer1'
+mpause 30
+sendln 'uninit 0'
+mpause 30
+sendln 'init 0'
+mpause 30
+sendln 'clk 0 m h 10 1000'
+mpause 30
+sendln 'config 0 i p h 320 320' 
+mpause 30
+sendln 'adctrg 0 e n'
+mpause 30
+sendln 'log off'
+mpause 30
+
+; Timer11
+sendln 'uninit 1'
+mpause 30
+sendln 'init 1'
+mpause 30
+sendln 'clk 1 m h 10 1000'
+mpause 30
+sendln 'config 1 i p h 960 960' 
+mpause 30
+sendln 'adctrg 1 e n'
+mpause 30
+
+; Timer12
+sendln 'uninit 2'
+mpause 30
+sendln 'init 2'
+mpause 30
+sendln 'clk 2 m h 10 1000'
+mpause 30
+sendln 'config 2 i p h 640 640' 
+mpause 30
+sendln 'adctrg 2 e n'
+mpause 30
+
+; ADC0
+sendln 'cm adc'
+mpause 30
+sendln 'uninit 0'
+mpause 30
+sendln 'init 0'
+mpause 30
+sendln 'clk 0 p 64'
+mpause 30
+sendln 'config 0 n m 1 8 0'
+mpause 30
+sendln 'seq 0 1 0 0 8'
+mpause 30
+sendln 'seq 0 1 0 1 1'
+mpause 30
+sendln 'seq 0 1 0 2 2'
+mpause 30
+sendln 'seq 0 1 1 3 3'
+mpause 30
+sendln 'seq 0 1 1 4 4'
+mpause 30
+sendln 'seq 0 1 1 5 5'
+mpause 30
+sendln 'seq 0 1 2 6 6'
+mpause 30
+sendln 'seq 0 1 2 7 7'
+mpause 30
+
+; Timer10
+sendln 'cm timer1'
+mpause 30
+sendln 'start 0'
+mpause 30
+
+; Timer11
+sendln 'start 1'
+mpause 30
+
+; Timer12
+sendln 'start 2'
+mpause 30
+sendln 'cm adc'
+mpause 30
+sendln 'log off'
+mpause 30
+sendln 'start 0'
+pause 3 
+sendln 'dump 0'

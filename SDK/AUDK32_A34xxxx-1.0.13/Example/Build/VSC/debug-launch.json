@@ -1,0 +1,36 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "@AUDK32_TARGET@",
+            "type": "cortex-debug",
+            "request": "launch",
+            "servertype": "openocd",
+
+            "cwd": "${workspaceFolder}",
+
+            "armToolchainPath": "C:/Program Files (x86)/abov/eMStudio32/bin/13.2 Rel1/bin",
+
+            "executable": "Example/Build/VSC/@PROJECT@/build/@PROJECT_NAME@.elf",
+
+            "serverpath": "Tool/OpenOCD/win32/openocd.win32.exe",
+
+            "device": "cortex-m4",
+            "runToEntryPoint": "main",
+            "postLaunchCommands": [
+                "monitor reset halt"
+            ],
+
+            "liveWatch": {
+                "enabled": true,
+                "samplesPerSecond": 5
+            },
+
+            "configFiles": [
+                "Tool/OpenOCD/share/openocd/scripts/board/abov32/@PRODUCT_LOWER@/@AUDK32_TARGET_LOWER@/starterkit-@TARGET_BOARD_LOWER@-a.cfg"
+            ],
+
+            "svdFile": "ProductConfig/@AUDK32_TARGET@/SVD/@AUDK32_TARGET_LOWER@.svd"
+        }
+    ]
+}

@@ -1,0 +1,39 @@
+; A. Description
+;    A list of commands here configures FRT module and generates an overflow interrupt.
+;
+; B. Preparation
+;    N/A
+;
+; C. Prerequisite Example (abov_example_config.h)
+;    1. FRT
+;
+; D. Note
+;    An Overflow interrupt occurs after 2 minute.
+;
+; Please, read the User Manual of the specific chip for more details.
+;
+; FRT0
+; 1. Channel                   : 0 (FRT0)
+;
+; 2. Clock                     : [ 0 m h 1 1 ]
+;    Source                    : m (MCCR : Misc Clock)
+;    MCCR Source               : h (HSI : High Speed Internal Clock - 16MHz)
+;    Source Divide             : 1
+;    FRT Pre-Divide            : 1 (No Pre-Divider available so default 1)
+;
+; 3. Config                    : [ 0 i f o ]
+;    Operation                 : i (Interrupt)
+;    Mode                      : f (Free-Run)
+;
+; FRT0
+sendln 'cm FRT'
+mpause 30
+sendln 'uninit 0'
+mpause 30
+sendln 'init 0'
+mpause 30
+sendln 'clk 0 m h 1 1'
+mpause 30
+sendln 'config 0 i f'
+mpause 30
+sendln 'start 0'

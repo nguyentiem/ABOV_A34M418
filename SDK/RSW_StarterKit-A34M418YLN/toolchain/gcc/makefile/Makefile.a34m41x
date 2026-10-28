@@ -1,0 +1,144 @@
+#########################################################
+# verbose
+#########################################################
+ifeq ($(VERBOSE),1)
+ECHO		:=
+else
+ECHO		:= @
+endif
+
+SYS_FPU		:= 1
+#CCACHE		:= ccache
+
+#########################################################
+# toolchain
+#########################################################
+#GNU_PATH	:= /opt/toolchain/gcc-arm-none-eabi-9-2020-q2-update/bin/
+#GNU_PATH	:= c:/Program Files (x86)/GNU Tools ARM Embedded/7 2017-q4-major/bin/
+GNU_PREFIX	:= arm-none-eabi-
+CC		:= "$(GNU_PATH)$(GNU_PREFIX)gcc"
+AS		:= "$(GNU_PATH)$(GNU_PREFIX)as"
+AR		:= "$(GNU_PATH)$(GNU_PREFIX)ar" rsc
+LD		:= "$(GNU_PATH)$(GNU_PREFIX)ld"
+NM		:= "$(GNU_PATH)$(GNU_PREFIX)nm"
+OBJDUMP		:= "$(GNU_PATH)$(GNU_PREFIX)objdump"
+OBJCOPY		:= "$(GNU_PATH)$(GNU_PREFIX)objcopy"
+SIZE		:= "$(GNU_PATH)$(GNU_PREFIX)size"
+MKDIR		:= "mkdir" -p
+RM		:= "rm" -rf
+CP		:= "cp"
+EXT_EXEC	:= elf
+EXT_BIN		:= bin
+EXT_HEX		:= hex
+EXT_LIB		:= a
+
+#########################################################
+# path, source, object, output
+#########################################################
+SYS_PATH	:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))../../..)
+OUT_PATH	:= out
+SRC_PATH	:= $(sort $(abspath $(dir $(SRCS))))
+DEFS		+= A34M418
+OBJS		:= $(notdir $(SRCS))
+OBJS_C		:= $(OBJS:.c=.o)
+OBJS_ASM	:= $(OBJS_C:.s=.o)
+OBJ_FILES	:= $(addprefix $(OUT_PATH)/,$(OBJS_ASM))
+DEP_FILES	:= $(OBJ_FILES:.o=.d)
+INC_FLAGS	:= $(addprefix -I,$(INCS))
+DEF_FLAGS	:= $(addprefix -D,$(DEFS))
+LIB_FLAGS	:= $(LIBS)
+LDS_FLAGS	:= $(addprefix -T,$(LDS))
+
+vpath %.c $(SRC_PATH)
+vpath %.s $(SRC_PATH)
+
+#########################################################
+# assembly compiler flags
+#########################################################
+ASMFLAGS	+= -Os -g -Wall -mcpu=cortex-m4 -mthumb -mabi=aapcs
+ASMFLAGS	+= -x assembler-with-cpp
+ifeq ($(SYS_FPU),1)
+ASMFLAGS	+= -mfloat-abi=hard -mfpu=fpv4-sp-d16
+else
+ASMFLAGS	+= -mfloat-abi=soft
+endif
+ASMFLAGS	+= $(DEF_FLAGS)
+ASMFLAGS	+= $(INC_FLAGS)
+
+#########################################################
+# C compiler flags
+#########################################################
+CFLAGS		+= -Os -g -Wall -Wextra -Wno-format -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast -Wno-unused-result -Wno-unused-parameter -Wno-sign-compare
+CFLAGS		+= -fno-exceptions -fno-common -ffunction-sections -fdata-sections -fno-strict-aliasing -fno-builtin -fshort-enums
+CFLAGS		+= -Wno-missing-field-initializers -Wno-empty-body
+CFLAGS		+= -std=gnu99
+CFLAGS		+= -mcpu=cortex-m4 -mthumb -mabi=aapcs
+ifeq ($(SYS_FPU),1)
+CFLAGS		+= -mfloat-abi=hard -mfpu=fpv4-sp-d16
+else
+CFLAGS		+= -mfloat-abi=soft
+endif
+CFLAGS		+= $(DEF_FLAGS)
+CFLAGS		+= $(INC_FLAGS)
+
+#########################################################
+# linker flags
+#########################################################
+LDFLAGS		+= -Xlinker -Map=$(OUT_PATH)/$(TARGET).map -Xlinker --cref
+LDFLAGS		+= -mcpu=cortex-m4 -mthumb -mabi=aapcs
+LDFLAGS		+= -Wl,--gc-sections
+LDFLAGS		+= --specs=nano.specs -lc -lnosys
+ifeq ($(SYS_FPU),1)
+LDFLAGS		+= -mfloat-abi=hard -mfpu=fpv4-sp-d16
+else
+LDFLAGS		+= -mfloat-abi=soft
+endif
+LDFLAGS		+= $(DEF_FLAGS)
+LDFLAGS		+= $(LIB_FLAGS)
+LDFLAGS		+= $(INC_FLAGS)
+LDFLAGS		+= $(LDS_FLAGS)
+
+all: $(OUT_PATH) $(OUT_PATH)/$(TARGET).$(EXT_EXEC) $(OUT_PATH)/$(TARGET).$(EXT_HEX) $(OUT_PATH)/$(TARGET).$(EXT_BIN)
+
+clean:
+	@echo "cleaning"
+	$(ECHO) $(RM) $(OUT_PATH)
+
+lib: $(OUT_PATH) $(OUT_PATH)/$(TARGET).$(EXT_LIB)
+
+$(OUT_PATH):
+	@echo "making output directory \"$@\""
+	$(ECHO) $(MKDIR) $@
+
+$(OUT_PATH)/$(TARGET).$(EXT_EXEC): $(OBJ_FILES)
+	@echo "linking \"$@\""
+	$(ECHO) $(CC) $(OBJ_FILES) $(LDFLAGS) -o $@
+	$(ECHO) $(SIZE) $@
+
+$(OUT_PATH)/$(TARGET).$(EXT_HEX): $(OUT_PATH)/$(TARGET).$(EXT_EXEC)
+	@echo "creating \"$@\""
+	$(ECHO) $(OBJCOPY) -O ihex $(OUT_PATH)/$(TARGET).$(EXT_EXEC) $@
+
+$(OUT_PATH)/$(TARGET).$(EXT_BIN): $(OUT_PATH)/$(TARGET).$(EXT_EXEC)
+	@echo "creating \"$@\""
+	$(ECHO) $(OBJCOPY) -O binary $(OUT_PATH)/$(TARGET).$(EXT_EXEC) $@
+
+$(OUT_PATH)/$(TARGET).$(EXT_LIB): $(OBJ_FILES)
+	@echo "creating \"$@\""
+	$(ECHO) $(AR) $@ $(OBJ_FILES)
+
+$(OUT_PATH)/%.o: %.s
+	@echo "compiling $<"
+	$(ECHO) $(CCACHE) $(CC) $(ASMFLAGS) -MMD -c -o $@ $<
+
+$(OUT_PATH)/%.o: %.c
+	@echo "compiling $<"
+	$(ECHO) $(CCACHE) $(CC) $(CFLAGS) -MMD -c -o $@ $<
+
+
+-include $(DEP_FILES)
+
+
+flash:
+	$(SYS_PATH)/tools/openocd/openocd.sh a34m41x $(OUT_PATH)/$(TARGET).hex
+

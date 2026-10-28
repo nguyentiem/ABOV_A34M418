@@ -1,0 +1,68 @@
+; A. Description
+;    A list of commands here configures USART as USRT and transmits data.
+;
+; B. Preparation
+;    Connecting ports with a suitable instrument should be correct
+;
+; C. Prerequisite Example (abov_example_config.h)
+;    1. USART
+;    2. PCU/GPIO
+;
+; D. Default Port
+;    1. USART0  : PC12 (Serial Clock)
+;               : PC4 (Transmit)
+;               : PC5 (Receive)
+;
+; For more information, read a user's manual of the target device carefully.
+;
+; USART0
+; 1. Channel                   : 0 (USART0)
+;
+; 2. Config                    : [ 0 i a m 8 n 1 0 38400 ]
+;    Operation                 : i (Interrupt)
+;    USART Mode                : a (USRT)
+;    USRT Mode                 : m (Master)
+;    Data Bit                  : 8 (8bit)
+;    Parity                    : n (None)
+;    Stop Bit                  : 1 (1bit)
+;    Polarity                  : 0 (Tx Rising and Rx Falling Edge)
+;    Baudrate                  : 38400 bps
+;
+; 3. Data                      : [ 0 8 0xa5 0x5a 0xa5 0x5a 0x05 0x07 0x09 0xa0 ]
+;    Data Length               : 8
+;    Data                      : 0xa5 ... (Hexa and space (delimitor))
+;
+; 4. Tx                        : [ 0 8 ]
+;    Receive Data Length       : 8
+;
+; PCU (PB/Cx)
+; 1. Port Group                : 1 / 2 (PCU Port B / C)
+;
+; 2. Port                      : [ 1 14 a 4 -pupd p ] [ 1 15 a 1 -pupd p ] [ 2 0 a 1 -pupd p ]
+;    Pin Number                : 14 / 15 / 0
+;    Pin Mode                  : a (Alternative)
+;    Alternative               : 4 / 1 (SCK/Tx/Rx)
+;    Pull-up/down              : p (Pull-up)
+;
+; PCU (PB/Cx)
+sendln 'cm pcu'
+mpause 30
+sendln 'port 1 14 a 4 -pupd p'
+mpause 30
+sendln 'port 1 15 a 1 -pupd p'
+mpause 30
+sendln 'port 2 0 a 1 -pupd p'
+mpause 30
+
+; USART0
+sendln 'cm usart'
+mpause 30
+sendln 'uninit 0'
+mpause 30
+sendln 'init 0'
+mpause 30
+sendln 'config 0 i a m 8 n 1 0 38400'
+mpause 30
+sendln 'data 0 8 0xa5 0x5a 0xa5 0x5a 0x05 0x07 0x09 0xa0'
+mpause 30
+sendln 'tx 0 8'

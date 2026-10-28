@@ -1,0 +1,105 @@
+; A. Description
+;    A list of commands here configures I2C module, and transmits and receives data via I2C.
+;
+; B. Preparation
+;    Connecting ports with an external I2C device should be correct.
+;
+; C. Prerequisite Example (abov_example_config.h)
+;    1. I2C
+;    2. PCU/GPIO
+;
+; D. Default Port
+;    1. I2C0    : PB2 (Serial Clock)
+;               : PB3 (Serial Data)
+;    2. I2C1    : PA12 (Serial Clock)
+;               : PA13 (Serial Data)
+;
+; E. Port Connection
+;    1. PB2 (Serial Clock) <----> PA12 (Serial Clock)
+;    2. PB3 (Serial Data)  <----> PA13 (Serial Data)
+;
+; For more information, read a user's manual of the target device carefully.
+;
+; I2C0
+; 1. Channel                   : 0 (I2C0)
+;
+; 2. Config                    : [ 0 i m 400000 ]
+;    Operation                 : i (Interrupt)
+;    Mode                      : m (Master)
+;    Baudrate                  : 400000 (400KHz)
+;
+; 3. Data                      : [ 0 8 0xa5 0x5a 0xa5 0x5a 0x05 0x07 0x09 0xa0 ]
+;    Data Length               : 8
+;    Data                      : 0xa5 ... (Hexa and space (delimitor))
+;
+; 4. Tx                        : [ 0 8 -saddr 0x49 ]
+;    Receive Data Length       : 8
+;    Slave Address             : 0x49 (Hexa Format)
+;
+; I2C1
+; 1. Channel                   : 1 (I2C0)
+;
+; 2. Config                    : [ 1 i s 400000 -saddr 0x49 ]
+;    Operation                 : i (Interrupt)
+;    Mode                      : s (Slave)
+;    Baudrate                  : 400000 (400KHz)
+;    Slave Address             : 0x49 (Hexa Format)
+;
+; 3. Rx                        : [ 1 8 ]
+;    Receive Data Length       : 8
+;
+; PCU (PBx) for I2C0
+; 1. Port Group                : 1 (PCU Port B)
+;
+; 2. Port                      : [ 1 2 a 1 -pupd p ] [ 1 3 a 1 -pupd p ]
+;    Pin Number                : 2 / 3 
+;    Pin Mode                  : a (Alternative)
+;    Alternative               : 1 (SCL/SDA)
+;    Pull-up/down              : p (Pull-up)
+;
+; PCU (PAx) for I2C1
+; 1. Port Group                : 0 (PCU Port A)
+;
+; 2. Port                      : [ 0 12 a 1 -pupd p ] [ 0 13 a 1 -pupd p]
+;    Pin Number                : 12 / 13 
+;    Pin Mode                  : a (Alternative)
+;    Alternative               : 1 (SDA/SCL)
+;    Pull-up/down              : p (Pull-up)
+;
+; PCU (PBx/PAx)
+sendln 'cm pcu'
+mpause 30
+sendln 'port 1 2 a 1 -pupd p'
+mpause 30
+sendln 'port 1 3 a 1 -pupd p'
+mpause 30
+sendln 'port 0 12 a 1 -pupd p'
+mpause 30
+sendln 'port 0 13 a 1 -pupd p'
+mpause 30
+
+; I2C1
+mpause 500
+sendln 'cm i2c'
+mpause 30
+sendln 'uninit 1'
+mpause 30
+sendln 'init 1'
+mpause 30
+sendln 'config 1 i s 400000 -saddr 0x49'
+mpause 30
+sendln 'rx 1 8'
+
+; I2C0
+mpause 500
+sendln 'cm i2c'
+mpause 30
+sendln 'uninit 0'
+mpause 30
+sendln 'init 0'
+mpause 30
+sendln 'config 0 i m 400000'
+mpause 30
+sendln 'data 0 8 0xa5 0x5a 0xa5 0x5a 0x05 0x07 0x09 0xa0'
+mpause 30
+sendln 'tx 0 8 -saddr 0x49'

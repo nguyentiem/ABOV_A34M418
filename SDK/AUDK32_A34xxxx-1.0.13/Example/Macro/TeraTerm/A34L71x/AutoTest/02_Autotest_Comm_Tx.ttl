@@ -1,0 +1,156 @@
+; A. Description
+;    This script automatically executes I2C, SPI, and UART TX Tera Term example scripts.
+;    The 02_Autotest_Comm_Rx.ttl must be executed before running this script.
+;
+; B. Prerequisite Example (abov_example_config.h)
+;    1. PCU/GPIO
+;    2. I2C
+;    3. LPUART
+;    4. USART
+;    5. SPI
+;
+; C. Port Connection (Testing must be conducted with two Starterkits)
+;    1. I2C0
+;     : PB2 (Serial Clock) <--> PB2 (Serial Clock)
+;     : PB3 (Serial Data)  <--> PB3 (Serial Data)
+;    2. LPUART0
+;     : PB15 (Transmit)    <--> PC0 (Receive)
+;     : PC0 (Receive)      <--> PB15 (Transmit)
+;    3. USART0
+;     : PB13 (Slave Select)                 <--> PB13 (Slave Select)
+;     : PB14 (Serial Clock)                 <--> PB14 (Serial Clock)
+;     : PB15 (Master Out Slave In/Transmit) <--> PC0 (Master In Slave Out/Receive)
+;     : PC0 (Master In Slave Out/Receive)   <--> PB15 (Master Out Slave In/Transmit)
+;    4. SPI0
+;     : PA14 (Slave Select)       <--> PA14 (Slave Select)
+;     : PA15 (Serial Clock)       <--> PA15 (Serial Clock)
+;     : PB0 (Master Out Slave In) <--> PB0 (Master Out Slave In)
+;     : PB1 (Master In Slave Out) <--> PB1 (Master In Slave Out)
+;
+
+getdir mdir
+fileret='02_Autotest_Result_Comm_Tx'
+sprintf2 retfilename '%s\Result\%s.txt' mdir fileret
+sprintf2 delfilename 'Result\%s.txt' fileret
+filedelete delfilename
+pause 1
+fileopen frethnd retfilename 0
+
+call tcspi
+call tclpuart
+call tcusart
+call tci2c
+
+fileclose frethnd
+dispstr 'End of 2.Auto Test Comm Tx'
+end
+
+:tci2c
+;===== START : TestCase I2C TX between STKs =====
+dispstr 10 10
+dispstr '===== START : TestCase I2C TX between STKs ====='
+dispstr 10
+
+ipstr='I2C'
+filestr='02_i2c_master_intr_tx_sa_0x49'
+delay=5
+call dotest
+
+filestr='04_i2c_slave_intr_tx_sa_0x49'
+delay=5
+call dotest
+
+;===== END : TestCase I2C TX between STKs =====
+dispstr 10
+dispstr '===== END : TestCase I2C TX between STKs ====='
+dispstr 10
+return
+
+:tcspi
+;===== START : TestCase SPI TX between STKs =====
+dispstr 10 10
+dispstr '===== START : TestCase SPI TX between STKs ====='
+dispstr 10
+
+ipstr='SPI'
+filestr='02_spi_master_intr_tx'
+delay=5
+call dotest
+
+;===== END : TestCase SPI TX between STKs =====
+dispstr 10 10
+dispstr '===== END : TestCase SPI TX between STKs ====='
+dispstr 10
+return
+
+:tclpuart
+;===== START : TestCase LPUART TX between STKs =====
+dispstr 10 10
+dispstr '===== START : TestCase LPUART TX between STKs ====='
+dispstr 10
+
+ipstr='LPUART'
+filestr='02_lpuart_intr_tx'
+delay=5
+call dotest
+
+;===== END : TestCase LPUART TX between STKs =====
+dispstr 10 10
+dispstr '===== END : TestCase LPUART TX between STKs ====='
+dispstr 10
+return
+
+:tcusart
+;===== START : TestCase USART TX between STKs =====
+dispstr 10 10
+dispstr '===== START : TestCase USART TX between STKs ====='
+dispstr 10
+
+ipstr='USART'
+filestr='02_usart_uart_intr_tx'
+delay=5
+call dotest
+
+ipstr='USART'
+filestr='04_usart_spi_intr_tx'
+delay=5
+call dotest
+
+ipstr='USART'
+filestr='06_usart_usrt_intr_tx'
+delay=5
+call dotest
+
+;===== END : TestCase USART TX between STKs =====
+dispstr 10
+dispstr '===== END : TestCase USART TX between STKs ====='
+dispstr 10
+return
+
+:dotest
+sprintf2 filename '%s\%s\%s.log' mdir ipstr filestr
+sprintf2 delfilename '%s\%s.log' ipstr filestr
+filedelete delfilename
+sprintf2 logstr 'Test %s' filestr
+sprintf2 testfile '..\%s\%s.ttl' ipstr filestr
+logopen filename 0 0
+logwrite logstr
+include testfile
+pause delay
+logclose
+call decision
+return
+
+:decision
+timeout=600
+fileopen fhandle filename 0
+fileseek fhandle 0 0
+do
+    filereadln fhandle line
+    filewriteln frethnd line
+loop while result == 0
+filewriteln frethnd 0
+filewriteln frethnd 0
+fileclose fhandle
+pause 1
+return

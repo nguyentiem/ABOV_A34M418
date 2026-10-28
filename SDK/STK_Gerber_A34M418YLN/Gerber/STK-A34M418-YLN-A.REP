@@ -1,0 +1,279 @@
+*************************************************************
+FileName = STK-A34M418-YLN-A.GBR
+AutoAperture = True
+*************************************************************
+Generating : Drill Drawing
+      File : STK-A34M418-YLN-A.GD1
+
+    Adding Drill Pair : Top Layer, Top-Bottom Layer, Bottom
+
+    Adding Layer      : Drill Drawing
+
+
+Used DCodes :
+    D12
+    D61
+    D77
+*************************************************************
+
+*************************************************************
+Generating : Drill Guide
+      File : STK-A34M418-YLN-A.GG1
+
+    Adding Drill Pair : Top Layer, Top-Bottom Layer, Bottom
+
+    Adding Layer      : Drill Guide
+
+
+Used DCodes :
+    D77
+*************************************************************
+
+*************************************************************
+Generating : Bottom Layer, Bottom
+      File : STK-A34M418-YLN-A.GBL
+
+    Adding Layer      : Bottom Layer, Bottom
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D12
+    D13
+    D61
+    D62
+    D63
+    D66
+    D67
+    D68
+    D69
+    D70
+    D71
+    D72
+    D73
+    D74
+*************************************************************
+
+*************************************************************
+Generating : Bottom Pad Master
+      File : STK-A34M418-YLN-A.GPB
+
+    Adding Layer      : Bottom Layer, Bottom
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D66
+    D67
+    D68
+    D69
+    D70
+    D71
+    D72
+    D73
+*************************************************************
+
+*************************************************************
+Generating : Top Layer, Top
+      File : STK-A34M418-YLN-A.GTL
+
+    Adding Layer      : Top Layer, Top
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D12
+    D13
+    D26
+    D36
+    D47
+    D48
+    D49
+    D50
+    D51
+    D52
+    D53
+    D54
+    D55
+    D56
+    D57
+    D58
+    D59
+    D60
+    D61
+    D62
+    D63
+    D64
+    D65
+    D66
+    D67
+    D68
+    D69
+    D70
+    D71
+    D72
+    D73
+    D74
+*************************************************************
+
+*************************************************************
+Generating : Bottom Overlay, Bot Silk
+      File : STK-A34M418-YLN-A.GBO
+
+    Adding Layer      : Bottom Overlay, Bot Silk
+
+
+Used DCodes :
+*************************************************************
+
+*************************************************************
+Generating : Keep-Out Layer
+      File : STK-A34M418-YLN-A.GKO
+
+    Adding Layer      : Keep-Out Layer
+
+
+Used DCodes :
+    D11
+*************************************************************
+
+*************************************************************
+Generating : Bottom Solder, Bot Mask
+      File : STK-A34M418-YLN-A.GBS
+
+    Adding Layer      : Bottom Solder, Bot Mask
+
+    Adding Layer      : Bottom Layer, Bottom
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D38
+    D39
+    D40
+    D41
+    D42
+    D43
+    D44
+    D45
+    D46
+*************************************************************
+
+*************************************************************
+Generating : Top Solder, Top Mask
+      File : STK-A34M418-YLN-A.GTS
+
+    Adding Layer      : Top Solder, Top Mask
+
+    Adding Layer      : Top Layer, Top
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D22
+    D23
+    D24
+    D25
+    D26
+    D27
+    D28
+    D29
+    D30
+    D31
+    D32
+    D33
+    D34
+    D35
+    D36
+    D37
+    D38
+    D39
+    D40
+    D41
+    D42
+    D43
+    D44
+    D45
+    D46
+*************************************************************
+
+*************************************************************
+Generating : Top Overlay, Top Silk
+      File : STK-A34M418-YLN-A.GTO
+
+    Adding Layer      : Top Overlay, Top Silk
+
+
+Used DCodes :
+    D10
+    D11
+    D12
+    D13
+    D14
+    D15
+    D16
+    D17
+    D18
+    D19
+    D20
+    D21
+*************************************************************
+
+*************************************************************
+Generating : Top Pad Master
+      File : STK-A34M418-YLN-A.GPT
+
+    Adding Layer      : Top Layer, Top
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D26
+    D36
+    D47
+    D48
+    D49
+    D50
+    D51
+    D52
+    D53
+    D54
+    D55
+    D56
+    D57
+    D58
+    D59
+    D60
+    D66
+    D67
+    D68
+    D69
+    D70
+    D71
+    D72
+    D73
+*************************************************************
+
+*************************************************************
+Generating : Assembly Drawing Top
+      File : STK-A34M418-YLN-A.GM1
+
+    Adding Layer      : Assembly Drawing Top
+
+
+Used DCodes :
+    D11
+    D12
+    D14
+    D75
+    D76
+    D77
+    D78
+*************************************************************
+

@@ -1,0 +1,157 @@
+; A. Description
+;    A list of commands here configures PGA and generates conversion results of ADC channel 0 and 1.
+;
+; B. Preparation
+;    Connecting target port with a suitable instrument. (such as DAC)
+;
+; C. Prerequisite Example (abov_example_config.h)
+;    1. PGA
+;    2. ADC
+;    3. Timer1
+;    4. PCU/GPIO
+;
+; D. Default Port
+;    1. ADC0    : PA0 (AN0)
+;
+; E. Port Connection 
+;    1. Supply Power + ----> PA0 (AN0)
+;
+; F. Note
+;    Should make analog input level to 1V.
+;
+; For more information, read a user's manual of the target device carefully.
+;
+; PGA0
+; 1. Channel                    : 0
+;
+; 2. Amplifier                  : [ amp 0 e 0 ]
+;    Enable                     : e (Enable)
+;    Output Driving Current     : 0 (0%)
+;
+; 3. Gain                       : [ gain 0 0 ]
+;    Enable                     : e (Enable)
+;    Gain value                 : 0 (1.200)
+;
+; ADC0
+; 1. Channel                    : 0
+;
+; 2. Clock                      : [ 0 p 64 ]
+;    Source                     : p (Periperhal Clock)
+;    Peripheral Clock Divide    : 64
+;
+; 3. Config                     : [ config 0 i q 1 2 0 ]
+;    Operation                  : i (Interrupt)
+;    Mode                       : q (Sequence)
+;    Base Trigger Source        : 1 (Timer1)
+;    Sequence Count             : 2
+;    Sampling Time              : 0
+;
+; 4. Seq                        : [ 0 1 0 0 0 ] [ 0 1 0 1 1 ]
+;    Trigger Source             : 1 (Timer1)
+;    Trigger Source Number      : 0 (Timer10)
+;    Sequence Number            : 0
+;    Input Channel              : 0 / 1
+;
+; Timer10
+; 1. Channel                    : 0 (Timer10)
+;
+; 2. Clock                      : [ 0 m h 10 1000 ]
+;    Source                     : m (MCCR : Misc Clock)
+;    MCCR Source                : h (HSI : High Speed Internal Clock - 32MHz)
+;    Source Divide              : 10
+;    Timer1 Pre-Divide          : 1000 (MCCR Clock / 10) / 1000
+;
+; 3. Config                     : [ 0 i p h 3200 3200 ]
+;    Operation                  : i (Interrupt)
+;    Mode                       : p (Period)
+;    Output Port Polarity       : h (High)
+;    A Data                     : 3200
+;    B Data                     : 3200
+
+; 4. Adc Trigger Config         : [ 0 e n ]
+;    Enable                     : e (Enable)
+;    Mode                       : n (Normal)
+;
+; PCU (PA)
+; 1. Port Group                : 0 (PCU Port A)
+;
+; 2. Port                      : [ 0 0 a 7 ]
+;    Pin Number                : 0
+;    Pin Mode                  : a (Alternative)
+;    Alternative               : 7 (AN0)
+; 
+
+; PCU (PA)
+sendln 'cm pcu'
+mpause 30
+sendln 'port 0 0 a 7'
+mpause 30
+
+; PGA0
+sendln 'cm pga'
+mpause 30
+sendln 'uninit 0'
+mpause 30
+sendln 'init 0'
+mpause 30
+sendln 'amp 0 e 0'
+mpause 30
+sendln 'gain 0 0'
+mpause 30
+
+; ADC0
+sendln 'cm adc'
+mpause 30
+sendln 'uninit 0'
+mpause 30
+sendln 'init 0'
+mpause 30
+sendln 'clk 0 p 64'
+mpause 30
+sendln 'config 0 i q 1 2 0'
+mpause 30
+sendln 'seq 0 1 0 0 0'
+mpause 30
+sendln 'seq 0 1 0 1 1'
+mpause 30
+sendln 'log on'
+mpause 30
+
+; Timer10
+sendln 'cm timer1'
+mpause 30
+sendln 'log off'
+mpause 30
+sendln 'uninit 0'
+mpause 30
+sendln 'init 0'
+mpause 30
+sendln 'clk 0 m h 10 1000'
+mpause 30
+sendln 'config 0 i p h 3200 3200'
+mpause 30
+sendln 'adctrg 0 e n'
+mpause 30
+sendln 'start 0'
+mpause 30
+
+; ADC0
+sendln 'cm adc'
+mpause 30
+sendln 'start 0'
+mpause 30
+
+; PGA0
+sendln 'cm pga'
+mpause 30
+i = 18
+do while i > 0
+    i = i - 1
+    sprintf2 cmd "gain 0 %d" i
+    sendln cmd
+    pause 1
+loop
+
+sendln 'cm adc'
+mpause 30
+sendln 'stop 0'

@@ -1,0 +1,157 @@
+; A. Description
+;    A list of commands here configures SCU CLK and generates a certain frequency of PLL Clock.
+;
+; B. Preparation
+;    Make an environment to measure clock frequency by clock output port.
+;
+; C. Prerequisite Example (abov_example_config.h)
+;    1. SCUCLK
+;    2. PCU/GPIO
+;
+; D. Default Port
+;    1. PCU    : PC9 (Clock Output)
+;
+; For more information, read a user's manual of the target device carefully.
+;
+; PCU (PC9)
+; 1. Port                        : [ 2 9 a 3 ]
+;    Port Group Number           : 2 (C group)
+;    Pin Number                  : 9
+;    Pin Mode                    : a (Alternative)
+;    Pin Alt Number              : 3 (Clock Output)
+;
+; SCUCLK
+; 1. Clkout                      : [ m 0 e ]
+;    Clock Source                : m (MCLK : Main Clock)
+;    Clock Source Divide         : 0
+;    Clock Output Enable         : e (Enable)
+;
+; 2. PLL                         : [ e h 8 1 15 0 0 s 10 2 ]
+;    Enable                      : e (Enable)
+;    Clock Source                : h (HSI : High Speed Internal Clock) (32MHz  or 48MHz)
+;    Clock Divide                : 8
+;    PLL Pre-divide (R)          : 1
+;    PLL Divide 1   (N1)         : 15
+;    PLL Divide 2   (N2)         : 0
+;    PLL Output Divide (P)       : 0
+;    PLL VCO (Freq Doubler) (D)  : s (VCO = 0)
+;    PLL Current                 : 10
+;    PLL Bias                    : 2 (none)
+;
+;              ( FIN * ( N1 + 1 ) * ( D + 1 ))
+;    Fout = -------------------------------------
+;            (( R + 1 ) * ( N2 + 1 ) * ( P + 1 ))
+;
+; ex) pll e h 8 1 15 0 0 s 10 2 ( HSI 32MHz )
+;
+;            ((32000000 / 8) * ( 15 + 1 ) * ( 0 + 1 ))
+;    Fout = -------------------------------------------,    Fout = 32MHz
+;               (( 1 + 1 ) * ( 0 + 1 ) * ( 0 + 1 ))
+;
+; ex) pll e h 8 2 15 0 0 s 10 2 ( HSI 48MHz )
+;
+;            ((48000000 / 8) * ( 15 + 1 ) * ( 0 + 1 ))
+;    Fout = -------------------------------------------,    Fout = 32MHz
+;               (( 2 + 1 ) * ( 0 + 1 ) * ( 0 + 1 ))
+;
+; ex) pll e e 4 0 15 0 0 s 10 2 ( HSE : High Speed External Clock = 8MHz )
+;
+;            ((8000000 / 4) * ( 15 + 1 ) * ( 0 + 1 ))
+;    Fout = -------------------------------------------,    Fout = 32MHz
+;               (( 0 + 1 ) * ( 0 + 1 ) * ( 0 + 1 ))
+;
+;
+; PCU (PC9)
+sendln 'cm pcu'
+mpause 30
+sendln 'port 2 9 a 3'
+mpause 30
+
+; SCUCLK
+sendln 'cm scuclk'
+mpause 30
+sendln 'clkout m 0 e'
+mpause 30
+
+i = 10
+do while i > 0
+    i = i - 1; 
+
+pause 1
+; 48Mhz (38400bps)
+dispstr 10 10 '<pll = 48MHz>' 
+dispstr 10 10
+sendln 'pll e h 8 1 23 0 0 s 10 2 -bdr 38400'
+pause 1
+setbaud 38400
+pause 1
+sendln 'lm'
+
+pause 1
+; 32Mhz (38400bps)
+dispstr 10 10 '<pll = 32MHz>' 
+dispstr 10 10
+sendln 'pll e h 8 1 15 0 0 s 10 2 -bdr 38400'
+pause 1
+setbaud 38400
+pause 1
+sendln 'lm'
+
+pause 1
+; 16MHz (19200bps)
+dispstr 10 10 '<PLL = 16MHz>'
+dispstr 10 10
+pause 1 
+sendln 'pll e h 8 1 7 0 0 s 10 2 -bdr 19200'
+pause 1
+setbaud 19200
+pause 1 
+sendln 'lm'
+
+pause 1
+; 8MHz (9600bps)
+dispstr 10 10 '<PLL = 8MHz>'
+dispstr 10 10
+pause 1 
+sendln 'pll e h 8 1 7 0 1 s 10 2 -bdr 9600'
+pause 1
+setbaud 9600
+pause 1
+sendln 'lm'
+
+pause 1
+; 4MHz (4800bps)
+dispstr 10 10 '<PLL = 4MHz>'
+dispstr 10 10
+pause 1
+sendln 'pll e h 8 1 7 0 3 s 10 2 -bdr 4800'
+pause 1
+setbaud 4800
+pause 1 
+sendln 'lm'
+
+pause 1
+; 2MHz (2400bps)
+dispstr 10 10 '<PLL = 2MHz>'
+dispstr 10 10
+pause 1
+sendln 'pll e h 8 1 7 0 7 s 10 2 -bdr 2400'
+pause 1
+setbaud 2400
+pause 1
+sendln 'lm'
+
+pause 1
+; 1MHz (1200bps)
+dispstr 10 10 '<PLL = 1MHz>'
+dispstr 10 10
+pause 1
+sendln 'pll e h 8 1 7 0 15 s 10 2 -bdr 1200'
+pause 2
+setbaud 1200
+pause 2
+sendln 'lm'
+pause 1
+
+loop
+

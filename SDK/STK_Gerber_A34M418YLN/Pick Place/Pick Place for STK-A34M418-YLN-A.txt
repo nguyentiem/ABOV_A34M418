@@ -1,0 +1,112 @@
+Altium Designer Pick and Place Locations
+D:\MyProject\PCAD\MDS\DEMO\Starter Kit\Starter Kit 32bits\Starter Kit_A34M418\STK-A34M418-YLN-A V2.0\Project Outputs for STK-A34M418-YLN-A\Pick Place\Pick Place for STK-A34M418-YLN-A.txt
+
+========================================================================================================================
+File Design Information:
+
+Date:       01-02-21
+Time:       16:01
+Revision:   Not in VersionControl
+Variant:    No variations
+Units used: mil
+
+Designator Comment                 Layer    Footprint                Center-X(mil) Center-Y(mil) Rotation Description                                                  
+L1         Bead                    TopLayer R0603                    2725.000      -225.000      180      BEAD0603(1608)                                               
+J3         "PH2X2 + Short Cap 2ea" TopLayer PH2X2_JMP                1850.000      -400.000      0        2.54mm                                                       
+C1         27pF                    TopLayer CC0603                   2475.000      350.000       270      1608,Capacitor                                               
+C2         0.1uF                   TopLayer CC0603                   2725.000      225.000       360      1608,Capacitor                                               
+C3         "10uF 16v"              TopLayer TC3216                   2500.000      -450.000      180      "TCA (3216), Tantal Capacitor"                               
+C4         0.1uF                   TopLayer CC0603                   2275.000      -300.000      270      1608,Capacitor                                               
+C5         27pF                    TopLayer CC0603                   2600.000      350.000       270      1608,Capacitor                                               
+C6         0.1uF                   TopLayer CC0603                   2400.000      350.000       90       1608,Capacitor                                               
+C7         0.1uF                   TopLayer CC0603                   2725.000      -150.000      180      1608,Capacitor                                               
+C8         0.1uF                   TopLayer CC0603                   2200.000      -300.000      270      1608,Capacitor                                               
+C9         0.1uF                   TopLayer CC0603                   2575.000      -300.000      90       1608,Capacitor                                               
+C12        0.1uF                   TopLayer CC0603                   2500.000      -300.000      270      1608,Capacitor                                               
+C13        "10uF 16v"              TopLayer TC3216                   2250.000      -450.000      360      "TCA (3216), Tantal Capacitor"                               
+C17        0.1uF                   TopLayer CC0603                   2025.000      350.000       90       1608,Capacitor                                               
+C20        2.2uF                   TopLayer CC0603                   2175.000      350.000       90       1608,Capacitor                                               
+D2         GREEN                   TopLayer LED0603(GREEN)           1850.000      -550.000      360      LED0603                                                      
+D3         RED                     TopLayer LED0603(RED)             1850.000      -650.000      360      LED0603                                                      
+F2         MF-MSMF050              TopLayer R0603                    2250.000      350.000       90       BEAD0603(1608)                                               
+J2         PH2X5                   TopLayer PH2X5                    1850.000      0.000         0        2.54mm                                                       
+P1         PH1X4(Not_I)            TopLayer PH1X4                    2375.000      -600.000      270      2.54mm                                                       
+R1         100k                    TopLayer R0603                    2325.000      350.000       270      "1608, Resistor"                                             
+R3         22R                     TopLayer R0603                    2725.000      -75.000       180      "1608, Resistor"                                             
+R4         22R                     TopLayer R0603                    2725.000      0.000         180      "1608, Resistor"                                             
+R5         1k5                     TopLayer R0603                    2725.000      75.000        360      "1608, Resistor"                                             
+R12        510R                    TopLayer R0603                    2050.000      -550.000      180      "1608, Resistor"                                             
+R13        510R                    TopLayer R0603                    2050.000      -650.000      180      "1608, Resistor"                                             
+R14        10k                     TopLayer R0603                    2050.000      250.000       360      "1608, Resistor"                                             
+R15        10k                     TopLayer R0603                    2100.000      350.000       90       "1608, Resistor"                                             
+R17        100k                    TopLayer R0603                    2725.000      150.000       360      "1608, Resistor"                                             
+R18        100k                    TopLayer R0603                    2050.000      -275.000      180      "1608, Resistor"                                             
+R19        100R                    TopLayer R0603                    2050.000      -200.000      180      "1608, Resistor"                                             
+R20        100R                    TopLayer R0603                    2050.000      175.000       180      "1608, Resistor"                                             
+R21        100R                    TopLayer R0603                    2050.000      100.000       180      "1608, Resistor"                                             
+R22        100R                    TopLayer R0603                    2050.000      25.000        180      "1608, Resistor"                                             
+R23        100R                    TopLayer R0603                    2050.000      -125.000      180      "1608, Resistor"                                             
+R24        1k                      TopLayer R0603                    2050.000      -50.000       180      "1608, Resistor"                                             
+U1         STM32F103C8T6           TopLayer LQFP48T                  2375.000      0.000         180      "STM32 medium-density performance line ARM-based 32-bit MCU" 
+U2         AMS1117-3.3             TopLayer SOT-223                  2800.000      -525.984      180      "1A Low Dropout VoltagevRegulator"                           
+Y1         SA18130G3-8.000-G       TopLayer XTAL_SMD                 2450.000      550.000       90       "Crystal A(20pF), B(18pF), C(30pF), HC-49/SM"                
+R25        100R                    TopLayer R0603                    2350.000      -300.000      270      "1608, Resistor"                                             
+R26        100R                    TopLayer R0603                    2425.000      -300.000      270      "1608, Resistor"                                             
+P2         "PH1X3 + Short Cap"     TopLayer PH1X3_JMP                1900.000      550.000       90       2.54mm                                                       
+D1         05SSL40L                TopLayer SOD-123F                 1850.000      375.000       180      "Diode, VF=0.3V@0.5A, SOD?123FL, Rectron"                    
+C19        0.1uF/250V              TopLayer CC0603                   2950.000      200.000       360      1608,Capacitor                                               
+J1         FCI_10103594            TopLayer USB-micro_FCI_10103594   3071.772      0.000         180      "USB RB Micro"                                               
+R6         10M                     TopLayer R0603                    2950.000      275.000       180      "1608, Resistor"                                             
+L2         "Bead Core"             TopLayer R0603                    -1300.000     0.000         270      BEAD0603(1608)                                               
+C209       0.1uF                   TopLayer CC0603                   -1475.000     -275.000      180      1608,Capacitor                                               
+C202       0.1uF                   TopLayer CC0603                   -1225.000     0.000         90       1608,Capacitor                                               
+C109       0.1uF                   TopLayer CC0603                   -1475.000     275.000       180      1608,Capacitor                                               
+U101       A34M418YL               TopLayer LQFP120_50P1800X1800X160 -50.000       0.000         315      "120LQFP, ARM Cortex-M4F"                                    
+J102       PH2X30                  TopLayer PH2X30                   -50.000       750.000       270      2.54mm                                                       
+J101       PH2X30                  TopLayer PH2X30                   -50.000       -750.000      90       2.54mm                                                       
+C101       27pF                    TopLayer CC0603                   650.000       150.000       90       1608,Capacitor                                               
+C102       27pF                    TopLayer CC0603                   650.000       -150.000      270      1608,Capacitor                                               
+C103       30pF(NA)                TopLayer CC0603                   -850.000      -125.630      180      1608,Capacitor                                               
+C104       30pF(NA)                TopLayer CC0603                   -850.000      124.370       180      1608,Capacitor                                               
+C105       0.1uF                   TopLayer CC0603                   1050.000      -150.000      90       1608,Capacitor                                               
+C106       1uF                     TopLayer CC0603                   1275.000      150.000       270      1608,Capacitor                                               
+C201       0.1uF                   TopLayer CC0603                   1050.000      150.000       270      1608,Capacitor                                               
+C108       0.1uF                   TopLayer CC0603                   -1475.000     500.000       360      1608,Capacitor                                               
+D101       GREEN                   TopLayer LED0603(GREEN)           -1550.000     200.000       360      LED0603                                                      
+D102       GREEN                   TopLayer LED0603(GREEN)           -1550.000     125.000       360      LED0603                                                      
+D103       GREEN                   TopLayer LED0603(GREEN)           -1550.000     50.000        360      LED0603                                                      
+D104       GREEN                   TopLayer LED0603(GREEN)           -1550.000     -50.000       360      LED0603                                                      
+D105       GREEN                   TopLayer LED0603(GREEN)           -1550.000     -125.000      360      LED0603                                                      
+D106       GREEN                   TopLayer LED0603(GREEN)           -1550.000     -200.000      360      LED0603                                                      
+D203       RED                     TopLayer LED0603(RED)             1525.000      675.000       270      LED0603                                                      
+J103       PHB2X5(NA)              TopLayer PH2X5                    1450.000      0.000         360      2.54mm                                                       
+J202       "PH1X2 + Short Cap."    TopLayer PH1X2                    1450.000      -450.000      360      2.54mm                                                       
+J205       PH1X2                   TopLayer PH1X2                    1450.000      450.000       360      2.54mm                                                       
+R101       1M(NA)                  TopLayer R0603                    650.000       0.000         270      "1608, Resistor"                                             
+R102       1M(NA)                  TopLayer R0603                    -650.000      -0.630        90       "1608, Resistor"                                             
+R103       1k                      TopLayer R0603                    -1725.000     200.000       180      "1608, Resistor"                                             
+R104       1k                      TopLayer R0603                    -1725.000     125.000       180      "1608, Resistor"                                             
+R105       1k                      TopLayer R0603                    -1725.000     50.000        180      "1608, Resistor"                                             
+R106       1k                      TopLayer R0603                    -1725.000     -50.000       180      "1608, Resistor"                                             
+R107       1k                      TopLayer R0603                    -1725.000     -125.000      180      "1608, Resistor"                                             
+R108       1k                      TopLayer R0603                    -1725.000     -200.000      180      "1608, Resistor"                                             
+R109       10k                     TopLayer R0603                    975.000       150.000       270      "1608, Resistor"                                             
+R110       10k                     TopLayer R0603                    975.000       -150.000      90       "1608, Resistor"                                             
+R201       10k                     TopLayer R0603                    -1475.000     350.000       180      "1608, Resistor"                                             
+R202       10k                     TopLayer R0603                    1275.000      -150.000      270      "1608, Resistor"                                             
+R204       100R                    TopLayer R0603                    1525.000      -675.000      90       "1608, Resistor"                                             
+R207       10k                     TopLayer R0603                    -1475.000     -350.000      180      "1608, Resistor"                                             
+R208       100R                    TopLayer R0603                    -1475.000     -425.000      360      "1608, Resistor"                                             
+R209       1k                      TopLayer R0603                    1525.000      825.000       90       "1608, Resistor"                                             
+SW201      RESET                   TopLayer TACT_SMD                 -1700.000     500.000       90       TACT_SMD                                                     
+SW202      USER_SW                 TopLayer TACT_SMD                 -1700.000     -500.000      90       TACT_SMD                                                     
+Y101       ATS-49/8MHz             TopLayer XTAL                     800.000       0.000         360      Crystal                                                      
+R203       100R                    TopLayer R0603                    -1475.000     425.000       360      "1608, Resistor"                                             
+Y102       AB38T-32.768KHz(NA)     TopLayer XTALC2                   -725.000      -0.630        90       Crystal                                                      
+MH1        PIN_P6.0H3.0            TopLayer PIN_MH_P6.0H3.0          -1750.000     850.000       0        PIN_P6.0H3.0                                                 
+MH2        PIN_P6.0H3.0            TopLayer PIN_MH_P6.0H3.0          -1750.000     -850.000      0        PIN_P6.0H3.0                                                 
+MH3        PIN_P6.0H3.0            TopLayer PIN_MH_P6.0H3.0          3050.000      -850.000      0        PIN_P6.0H3.0                                                 
+MH4        PIN_P6.0H3.0            TopLayer PIN_MH_P6.0H3.0          3050.000      850.000       0        PIN_P6.0H3.0                                                 
+C208       0.1uF                   TopLayer CC0603                   -1475.000     -500.000      180      1608,Capacitor                                               
+LOGO1      LOGO_ABOV               TopLayer LOGO_ABOV                -11921.657    -11181.102    360      Logo                                                         
+LOGO       LOGO_ABOV               TopLayer LOGO_ABOV                -11921.657    -11181.102    360      Logo                                                         

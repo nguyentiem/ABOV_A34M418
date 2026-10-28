@@ -1,0 +1,20 @@
+; A. Description
+;    A list of commands here configures SCU LVD and generates Low Voltage reset.
+;
+; B. Preparation
+;    Supply power to external power port by a suitable instrument or make a environment to generate low voltage.
+;
+; C. Prerequisite Example (abov_example_config.h)
+;    1. SCULVD
+;
+; For more information, read a user's manual of the target device carefully.
+;
+; SCULVD
+; 1. LVR                       : [ e 8 ]
+;    Interrupt Enable          : e (Maskable Interrupt)
+;    Detect Level              : 8 (see User Manual's Low Voltage Reset bit)
+;
+; SCULVD
+sendln 'cm sculvd'
+mpause 30
+sendln 'lvr e 8'

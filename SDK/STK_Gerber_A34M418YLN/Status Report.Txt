@@ -1,0 +1,10 @@
+Output: Bill of Materials
+Type  : BOM
+From  : PCB Document [STK-A34M418-YLN-A.PcbDoc]
+   Generated File[Bill of Materials-STK-A34M418-YLN-A.xls]
+
+
+Files Generated   : 1
+Documents Printed : 0
+
+Finished Output Generation At ¿ÀÈÄ 4:02:10 On 2021-2-01(¿ù)

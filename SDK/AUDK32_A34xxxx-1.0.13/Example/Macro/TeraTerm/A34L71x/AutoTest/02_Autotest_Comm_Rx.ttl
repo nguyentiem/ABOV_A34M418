@@ -1,0 +1,256 @@
+; A. Description
+;    This script automatically executes I2C, SPI, and UART RX Tera Term example scripts.
+;    The 02_Autotest_Comm_Tx.ttl must be executed within 5 seconds after running this script.
+;
+; B. Prerequisite Example (abov_example_config.h)
+;    1. PCU/GPIO
+;    2. I2C
+;    3. LPUART
+;    4. USART
+;    5. SPI
+;
+; C. Port Connection (Testing must be conducted with two Starterkits)
+;    1. I2C0
+;     : PB2 (Serial Clock) <--> PB2 (Serial Clock)
+;     : PB3 (Serial Data)  <--> PB3 (Serial Data)
+;    2. LPUART0
+;     : PB15 (Transmit)    <--> PC0 (Receive)
+;     : PC0 (Receive)      <--> PB15 (Transmit)
+;    3. USART0
+;     : PB15 (Transmit)            <--> PC0 (Receive)
+;     : PC0 (Receive)              <--> PB15 (Transmit)
+;     : PB13 (Slave Select)        <--> PB13 (Slave Select)
+;     : PB14 (Serial Clock)        <--> PB14 (Serial Clock)
+;     : PB15 (Master Out Slave In) <--> PC0 (Master In Slave Out)
+;     : PC0 (Master In Slave Out)  <--> PB15 (Master Out Slave In)
+;    4. SPI0
+;     : PA14 (Slave Select)        <--> PA14 (Slave Select)
+;     : PA15 (Serial Clock)        <--> PA15 (Serial Clock)
+;     : PB0 (Master Out Slave In)  <--> PB0 (Master Out Slave In)
+;     : PB1 (Master In Slave Out)  <--> PB1 (Master In Slave Out)
+;
+
+timeout=600
+Passstr='===== Test Result : Pass ====='#13#10
+Failstr='===== Test Result : Fail ====='#13#10
+Reviewstr='===== Test Result : Need Review ===='#13#10
+NeedReview=0
+Datastr='0xa5 0x5a 0xa5 0x5a 0x5 0x7 0x9 0xa0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0'
+MaxDatacnt=16
+Datacnt=1
+index=1
+Resultstr=''
+
+getdir mdir
+foldercreate 'Result'
+
+fileret='02_Autotest_Result_Comm_Rx'
+sprintf2 retfilename '%s\Result\%s.txt' mdir fileret
+sprintf2 delfilename 'Result\%s.txt' fileret
+filedelete delfilename
+fileopen frethnd retfilename 0
+
+call tcspi
+call tclpuart
+call tcusart
+call tci2c
+
+fileclose frethnd
+dispstr 'End of 2. Auto Test Comm Rx'
+end
+
+:tci2c
+;===== START : TestCase I2C RX between STKs =====
+dispstr 10 10
+dispstr '===== START : TestCase I2C RX between STKs ====='
+dispstr 10
+
+ipstr='I2C'
+foldercreate ipstr
+
+filestr='03_i2c_slave_intr_rx_sa_0x49'
+iprxstr='I2C : rx Data'
+Datastr='0xa5 0x5a 0xa5 0x5a 0x5 0x7 0x9 0xa0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0'
+MaxDatacnt=16
+Datacnt=1
+index=1
+delay=10
+call dotest
+
+filestr='01_i2c_master_intr_rx_sa_0x49'
+iprxstr='I2C : rx Data'
+Datastr='0xa0 0x9 0x7 0x5 0x5a 0xa5 0x5a 0xa5 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0'
+MaxDatacnt=16
+Datacnt=1
+index=1
+delay=5
+call dotest
+
+;===== END : TestCase I2C RX between STKs =====
+dispstr 10
+dispstr '===== END : TestCase I2C RX between STKs ====='
+dispstr 10
+return
+
+:tcspi
+;===== START : TestCase SPI RX between STKs =====
+dispstr 10 10
+dispstr '===== START : TestCase SPI RX between STKs ====='
+dispstr 10
+
+ipstr='SPI'
+foldercreate ipstr
+
+filestr='01_spi_slave_intr_rx'
+chkstr='SPI : (0) rx done'
+iprxstr='SPI : rx Data'
+Datastr='0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x9 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0'
+MaxDatacnt=16
+Datacnt=1
+index=1
+delay=5
+call dotest
+
+;===== END : TestCase SPI RX between STKs =====
+dispstr 10
+dispstr '===== END : TestCase SPI RX between STKs ====='
+dispstr 10
+return
+
+:tclpuart
+;===== START : TestCase LPUART RX between STKs =====
+dispstr 10 10
+dispstr '===== START : TestCase LPUART RX between STKs ====='
+dispstr 10
+
+ipstr='LPUART'
+foldercreate ipstr
+
+filestr='01_lpuart_intr_rx'
+chkstr='LPUART : (0) rx done'
+iprxstr='LPUART : rx Data'
+Datastr='0xa5 0x5a 0xa5 0x5a 0x5 0x7 0x9 0xa0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0'
+MaxDatacnt=16
+Datacnt=1
+index=1
+delay=5
+call dotest
+
+;===== END : TestCase LPUART RX between STKs =====
+dispstr 10
+dispstr '===== END : TestCase LPUART RX between STKs ====='
+dispstr 10
+return
+
+:tcusart
+;===== START : TestCase USART RX between STKs =====
+dispstr 10 10
+dispstr '===== START : TestCase USART RX between STKs ====='
+dispstr 10
+
+ipstr='USART'
+foldercreate ipstr
+
+filestr='01_usart_uart_intr_rx'
+chkstr='USART : (0) rx done'
+iprxstr='USART : rx Data'
+Datastr='0xa5 0x5a 0xa5 0x5a 0x5 0x7 0x9 0xa0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0'
+MaxDatacnt=16
+Datacnt=1
+index=1
+delay=5
+call dotest
+
+filestr='03_usart_spi_intr_rx'
+chkstr='USART : (0) rx done'
+iprxstr='USART : rx Data'
+Datastr='0xa5 0x5a 0xa5 0x5a 0x5 0x7 0x9 0xa0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0'
+MaxDatacnt=16
+Datacnt=1
+index=1
+delay=5
+call dotest
+
+filestr='05_usart_usrt_intr_rx'
+chkstr='USART : (0) rx done'
+iprxstr='USART : rx Data'
+Datastr='0xa5 0x5a 0xa5 0x5a 0x5 0x7 0x9 0xa0 0x0 0x0 0x0 0x0 0x0 0x0 0x0 0x0'
+MaxDatacnt=16
+Datacnt=1
+index=1
+delay=5
+call dotest
+
+;===== END : TestCase USART RX between STKs =====
+dispstr 10
+dispstr '===== END : TestCase USART RX between STKs ====='
+dispstr 10
+return
+
+:dotest
+sprintf2 filename '%s\%s\%s.log' mdir ipstr filestr
+sprintf2 delfilename '%s\%s.log' ipstr filestr
+filedelete delfilename
+sprintf2 logstr 'Test %s' filestr
+sprintf2 testfile '..\%s\%s.ttl' ipstr filestr
+logopen filename 0 0
+logwrite logstr
+include testfile
+pause delay
+logclose
+call decision
+return
+
+:decision
+timeout=600
+fileopen fhandle filename 0
+call cmpdata
+fileseek fhandle 0 0
+do
+    filereadln fhandle line
+    filewriteln frethnd line
+loop while result == 0
+filewriteln frethnd resultstr
+filewriteln frethnd 0
+filewriteln frethnd 0
+fileclose fhandle
+NeedReview=0
+resultstr=''
+pause 1
+return
+
+:cmpdata
+fileseek fhandle 0 0
+sprintf2 parsestr '%s=([a-zA-Z0-9]+)' iprxstr
+while 1
+    filereadln fhandle line
+    if result = 1 then
+        break
+    endif
+    strmatch line parsestr
+    if result > 0 then
+        dstr = groupmatchstr1
+        strinsert Resultstr index dstr
+        strlen dstr
+        index = index + result
+        if Datacnt > MaxDataCnt - 1 then
+            break
+        endif
+        strinsert Resultstr index ' '
+        index = index + 1
+        Datacnt = Datacnt + 1
+    endif
+endwhile
+;dispstr "Result : "
+;dispstr Resultstr
+;dispstr 10
+;dispstr "Cmp : "
+;dispstr Datastr
+;dispstr 10
+strcompare Resultstr Datastr
+if result == 0 then
+    resultstr=Passstr
+else
+    resultstr=Failstr
+endif
+return

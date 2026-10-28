@@ -1,0 +1,128 @@
+; A. Description
+;    This script automatically executes I2C, SPI, and UART TX Tera Term example scripts.
+;    The 02_Autotest_Comm_Rx.ttl must be executed before running this script.
+;
+; B. Prerequisite Example (abov_example_config.h)
+;    1. PCU/GPIO
+;    2. I2C
+;    3. UART
+;    4. SPI
+;
+; C. Port Connection (Testing must be conducted with two Starterkits)
+;    1. I2C0
+;     : PC7 (Serial Data)  <--> PC7 (Serial Data)
+;     : PC8 (Serial Clock) <--> PC8 (Serial Clock)
+;    2. UART1
+;     : PC6 (Transmit) <--> PC5 (Receive)
+;     : PC5 (Receive)  <--> PC6 (Transmit)
+;    3. SPI0
+;     : PA12 (Slave Select) <--> PA12 (Slave Select)
+;     : PA13 (Serial Clock) <--> PA13 (Serial Clock)
+;     : PA14 (Master Out Slave In) <--> PA14 (Master Out Slave In)
+;     : PA15 (Master In Slave Out) <--> PA15 (Master In Slave Out)
+;
+
+getdir mdir
+fileret='02_Autotest_Result_Comm_Tx'
+sprintf2 retfilename '%s\Result\%s.txt' mdir fileret
+sprintf2 delfilename 'Result\%s.txt' fileret
+filedelete delfilename
+pause 1
+fileopen frethnd retfilename 0
+
+call tcuart
+call tcspi
+call tci2c
+
+fileclose frethnd
+dispstr 'End of 2.Auto Test Comm Tx'
+end
+
+:tcuart
+;===== START : TestCase UART TX between STKs =====
+dispstr 10 10
+dispstr '===== START : TestCase UART TX between STKs ====='
+dispstr 10
+
+ipstr='UART'
+filestr='02_uart_intr_tx'
+delay=5
+call dotest
+
+ipstr='UART'
+filestr='04_uart_dma_tx'
+delay=5
+call dotest
+
+;===== END : TestCase UART TX between STKs =====
+dispstr 10
+dispstr '===== END : TestCase UART TX between STKs ====='
+dispstr 10
+return
+
+:tci2c
+;===== START : TestCase I2C TX between STKs =====
+dispstr 10 10
+dispstr '===== START : TestCase I2C TX between STKs ====='
+dispstr 10
+
+ipstr='I2C'
+filestr='02_i2c_master_intr_tx_sa_0x49'
+delay=5
+call dotest
+
+ipstr='I2C'
+filestr='04_i2c_slave_intr_tx_sa_0x49'
+delay=5
+call dotest
+
+;===== END : TestCase I2C TX between STKs =====
+dispstr 10
+dispstr '===== END : TestCase I2C TX between STKs ====='
+dispstr 10
+return
+
+:tcspi
+;===== START : TestCase SPI TX between STKs =====
+dispstr 10 10
+dispstr '===== START : TestCase SPI TX between STKs ====='
+dispstr 10
+
+ipstr='SPI'
+filestr='02_spi_master_intr_tx'
+delay=5
+call dotest
+
+;===== END : TestCase SPI TX between STKs =====
+dispstr 10 10
+dispstr '===== END : TestCase SPI TX between STKs ====='
+dispstr 10
+return
+
+:dotest
+sprintf2 filename '%s\%s\%s.log' mdir ipstr filestr
+sprintf2 delfilename '%s\%s.log' ipstr filestr
+filedelete delfilename
+sprintf2 logstr 'Test %s' filestr
+sprintf2 testfile '..\%s\%s.ttl' ipstr filestr
+logopen filename 0 0
+logwrite logstr
+include testfile
+pause delay
+logclose
+call decision
+return
+
+:decision
+timeout=600
+fileopen fhandle filename 0
+fileseek fhandle 0 0
+do
+    filereadln fhandle line
+    filewriteln frethnd line
+loop while result == 0
+filewriteln frethnd 0
+filewriteln frethnd 0
+fileclose fhandle
+pause 1
+return

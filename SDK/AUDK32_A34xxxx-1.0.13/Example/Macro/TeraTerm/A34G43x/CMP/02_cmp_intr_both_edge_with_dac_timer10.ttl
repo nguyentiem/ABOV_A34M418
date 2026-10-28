@@ -1,0 +1,129 @@
+; A. Description
+;    A list of commands here configures CMP and generates both edge detected interrupt.
+;
+; B. Preparation
+;    Supply reference and source signal to specific port by a suitable instrument.
+;
+; C. Prerequisite Example (abov_example_config.h)
+;    1. CMP
+;    2. DAC
+;    3. Timer1
+;
+; D. Default Port
+;    1. Timer1  : PA5 (Timer11 Output)
+;    2. DAC     : PA0 (DAC0O)
+;    3. CMP     : PA4 (CP0A0)
+;               : PA7 (CP0B)
+;
+; E. Port Connection
+;    1. PA5 (Timer11 Output) ----> PA4 (CP0A0)
+;    2. PA0 (DAC0O)          ----> PA7 (CP0B)
+;
+; For more information, read a user's manual of the target device carefully.
+;
+; CMP0
+; 1. Config                     : [ 0 i m 0 0 h b ]
+;    Operation                  : i (Interrupt)
+;    Interrupt Mode             : m (Maskable)
+;    Source                     : 0 (CP0A0)
+;    Reference                  : 0 (CP0B)
+;    Hysteresis                 : h (High)
+;    Trigger Mode               : b (both edge)
+;
+; DAC0
+; 1. Config                     : [ 0 p m ign i c -port 0x01 -pg p 0]
+;    Operation                  : p (Polling)
+;    Mode                       : m (Manual)
+;    Internal Test Procedure    : ign (Ignore)
+;    Reference Level            : i (Internal VDD)
+;    Re-load reference          : c (Constant)
+;    Output Port                : 0x01 (DAC0O)
+;    Programmable Gain          : p (Positive)
+;    Programmable Gain Level    : 0 (0dB)
+;
+; Timer11
+; 1. Channel                   : 0 (Timer11)
+;
+; 2. Clock                     : [ 0 m h 10 1000 ]
+;    Source                    : m ( MCCR : Misc Clock )
+;    MCCR Source               : h ( HSI : High Speed Internal Clock - 32MHz )
+;    Source Divide             : 10 
+;    Timer1 Pre-Divide         : 1000 ( MCCR Clock / 10 ) / 1000
+;
+; 3. Config                    : [ 0 i p h 3200 3200 ]
+;    Operation                 : i (Interrupt)
+;    Mode                      : p (Period)
+;    Output Port Polarity      : h (High)
+;    A Data                    : 3200
+;    B Data                    : 3200
+;
+; PCU (PAx)
+; 1. Port Group                : 0 (PCU Port A)
+;
+; 2. Port                      : [ 0 0 a 7 ] [ 0 4 a 7 ] [ 0 7 a 7 ]
+;    Pin Number                : 0 / 4 / 7
+;    Pin Mode                  : a (Alternative)
+;    Alternative               : 7 (DAC0O/CP0A0/CP0B)
+;
+; PCU (PA5)
+; 1. Port Group                : 0 (PCU Port A)
+;
+; 2. Port                      : [ 0 5 a 2 ]
+;    Pin Number                : 5 
+;    Pin Mode                  : a (Alternative)
+;    Alternative               : 2 (T1IO)
+;
+; PCU (PA)
+sendln 'cm pcu'
+mpause 30
+sendln 'port 0 5 a 2'
+mpause 30
+sendln 'port 0 4 a 7'
+mpause 30
+sendln 'port 0 0 a 7'
+mpause 30
+sendln 'port 0 7 a 7'
+mpause 30
+
+; Timer11
+sendln 'cm timer1'
+mpause 30
+sendln 'uninit 1'
+mpause 30
+sendln 'init 1'
+mpause 30
+sendln 'clk 1 m h 10 1000'
+mpause 30
+sendln 'config 1 i p h 3200 3200'
+mpause 30
+sendln 'log off'
+mpause 30
+sendln 'start 1'
+mpause 30
+
+; DAC0
+sendln 'cm dac'
+mpause 30
+sendln 'uninit 0'
+mpause 30
+sendln 'init 0'
+mpause 30
+sendln 'config 0 p m ign i c -port 0x01 -pg p 0'
+mpause 30
+sendln 'data 0 0xAFF'
+mpause 30
+sendln 'start 0'
+mpause 30
+
+; CMP0
+sendln 'cm cmp'
+mpause 30
+sendln 'uninit 0'
+mpause 30
+sendln 'init 0'
+mpause 30
+sendln 'config 0 i m 0 0 h b'
+mpause 30
+sendln 'log on 1'
+mpause 30
+sendln 'start 0'

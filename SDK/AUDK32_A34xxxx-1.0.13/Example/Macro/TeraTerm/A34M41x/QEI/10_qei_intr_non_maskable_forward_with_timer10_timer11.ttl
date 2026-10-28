@@ -1,0 +1,159 @@
+; A. Description
+;    A list of commands here configures QEI module and display a forward direction information.
+;
+; B. Preparation
+;    Connecting target port with a suitable instrument.
+;
+; C. Prerequisite Example (abov_example_config.h)
+;    1. QEI
+;    2. Timer1
+;    3. PCU/GPIO
+;
+; D. Default Port
+;    1. QEI     : PE7 (QEI0_A)
+;               : PE8 (QEI0_B)
+;               : PE9 (QEI0_IDX)
+;    2. Timer10 : PE11 (T0IO)
+;    3. Timer11 : PE12 (T1IO)
+;
+; E. Port Connection 
+;    1. PE11 (T0IO) ----> PE7 (QEI0_A)
+;       PE12 (T1IO) ----> PE8 (QEI0_B) 
+;
+; Please, read the User Manual of the specific chip for more details.
+;
+; QEI0
+; 1. Channel                    : 0 (QEI0)
+;
+; 2. Config (cfg)                 : [ 0 n 0x02 q b m d 0xFFFFF ]
+;    Operation                    : n (Non Maskable Interrupt)
+;    Interrupt Enable             : 0x02 (Direction Change)
+;    Signal Mode                  : q (Quadrature)
+;    Capture Edge Mode            : b (Phase-A & Phase-B Edge)
+;    Counter Reset                : m (Maximum Reset)
+;    Index Count by Ph-A and Ph-B : d (disable)
+;    Counter Maximum Value        : 0xFFFFF
+; 
+; Timer10
+; 1. Channel                    : 0 (Timer10)
+;
+; 2. Clock                      : [ 0 m h 10 1000 ]
+;    Source                     : m (MCCR : Misc Clock)
+;    MCCR Source                : h (HSI : High Speed Internal Clock - 32MHz)
+;    Source Divide              : 10
+;    Timer1 Pre-Divide          : 1000 (MCCR Clock / 10) / 1000
+;
+; 3. Config                     : [ 0 i p l 320 320 -io o ]
+;    Operation                  : i (Interrupt)
+;    Mode                       : p (Period)
+;    Output Port Polarity       : h (High)
+;    A Data                     : 320
+;    B Data                     : 320
+;    Port In/Out (-io)          : o (Output)
+;
+; Timer11
+; 1. Channel                    : 1 (Timer11)
+;
+; 2. Clock                      : [ 1 m h 10 1000 ]
+;    Source                     : m (MCCR : Misc Clock)
+;    MCCR Source                : h (HSI : High Speed Internal Clock - 32MHz)
+;    Source Divide              : 10
+;    Timer1 Pre-Divide          : 1000 (MCCR Clock / 10) / 1000
+;
+; 3. Config                     : [ 1 i p l 320 320 -io o ]
+;    Operation                  : i (Interrupt)
+;    Mode                       : p (Period)
+;    Output Port Polarity       : h (High)
+;    A Data                     : 320
+;    B Data                     : 320
+;    Port In/Out (-io)          : o (Output)
+;
+; PCU (PEx)
+; 1. Port Group                   : 4 (PCU Port E)
+;
+; 2. Port                         : [ 4 7 a 2 ] [ 4 8 a 2 ] [ 4 9 a 2 ]
+;    Pin Number                   : 7 / 8 / 9
+;    Pin Mode                     : a (Alternative)
+;    Alternative                  : 2 (QEI0_A / QEI0_B / QEI0_IDX)
+;
+; PCU (PEx)
+; 1. Port Group                   : 4 (PCU Port E)
+;
+; 2. Port                         : [ 4 11 a 2 ] [ 4 12 a 2 ]
+;    Pin Number                   : 11 / 12
+;    Pin Mode                     : a (Alternative)
+;    Alternative                  : 2 (T0IO / T1IO)
+;
+
+; PCU (PE7)
+sendln 'cm pcu'
+mpause 30
+sendln 'port 4 7 a 2 -pupd p'
+mpause 30
+
+; PCU (PE8)
+sendln 'port 4 8 a 2 -pupd p'
+mpause 30
+
+; PCU (PE9)
+sendln 'port 4 9 a 2 -pupd p'
+mpause 30
+
+; PCU (PE11)
+sendln 'port 4 11 a 2'
+mpause 30
+
+; PCU (PE12)
+sendln 'port 4 12 a 2'
+mpause 30
+
+; Timer10
+sendln 'cm timer1'
+mpause 30
+sendln 'uninit 0'
+mpause 30
+sendln 'init 0'
+mpause 30
+sendln 'clk 0 m h 10 1000'
+mpause 30
+sendln 'config 0 i p l 320 320 -io o' 
+mpause 30
+sendln 'log off'
+mpause 30
+
+; Timer11
+mpause 30
+sendln 'uninit 1'
+mpause 30
+sendln 'init 1'
+mpause 30
+sendln 'clk 1 m h 10 1000'
+mpause 30
+sendln 'config 1 i p l 320 320 -io o' 
+mpause 30
+sendln 'start 0'
+; Under 40 msec is to generate a phase difference.
+mpause 40
+sendln 'start 1'
+mpause 30
+
+; QEI0
+sendln 'cm qei'
+mpause 30
+sendln 'uninit 0'
+mpause 30
+sendln 'init 0'
+mpause 30
+sendln 'cfg 0 n 0x02 q b m d 0xFFFFF' 
+mpause 30
+sendln 'log on 0'
+mpause 30
+sendln 'start 0' 
+
+i = 10
+do while i > 0
+    i = i - 1
+    pause 1
+    sendln 'info 0'
+loop
+

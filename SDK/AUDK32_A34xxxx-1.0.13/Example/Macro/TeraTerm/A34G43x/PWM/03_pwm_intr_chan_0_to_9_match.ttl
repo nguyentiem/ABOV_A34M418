@@ -1,0 +1,190 @@
+; A. Description
+;    A list of commands here configures PWM and generates channel 0 ~ 7 match interrupts.
+;
+; B. Preparation
+;    N/A
+;
+; C. Prerequisite Example (abov_example_config.h)
+;    1. PWM
+;    2. PCU/GPIO
+;
+; D. Default Port
+;    1. PWM : PA8  (PWM0A) PA14 (PWM0B)
+;           : PA9  (PWM1A) PA15 (PWM1B)
+;           : PA10 (PWM2A) PB0  (PWM2B)
+;           : PA11 (PWM3A) PB1  (PWM3B)
+;           : PA12 (PWM4A) PB2  (PWM4B)
+;           : PB10 (PWM5A) PB3  (PWM5B)
+;           : PB11 (PWM6A) PF4  (PWM6B)
+;           : PB12 (PWM7A) PF5  (PWM7B)
+;           : PB13 (PWM8A) PE3  (PWM8B)
+;           : PB14 (PWM9A) PE4  (PWM9B)
+;
+; For more information, read a user's manual of the target device carefully.
+;
+; PWM (0 ~ 9)
+; 1. Channel                   : 0 / 1 / 2 / 3 / 4 / 5 / 6 / 7 / 8 / 9
+;
+; 2. Clock                     : [ 0 p e 249 16 ]
+;    Channel                   : 0 / 1 / 2 / 3 / 4 / 5 / 6 / 7 / 8 / 9
+;    Source                    : p (PCLK : Peripherl Clock)
+;    Pre-Scaler Enable         : e (Enable)
+;    Pre-Scaler Value          : 249 (Value + 1)
+;    Clock Divider             : 16
+;
+; 3. Config                    : [ 0 i n d 4000 2000 ]
+;    Channel                   : 0 / 1 / 2 / 3 / 4 / 5 / 6 / 7 / 8 / 9
+;    Operation                 : i (Interrupt)
+;    Port A Invert             : n (Not Inverted)
+;    Sync with other channels  : d (Disable)
+;    Period                    : 4000
+;    Duty                      : 2000
+;
+; PCU (PA/Bx)
+; 1. Port Group                : 0 / 1 (PCU Port A / B)
+;
+; 2. Port                      : [ 0 8 a 2 ] [ 0 9 a 2 ] [ 0 10 a 2 ] [ 0 11 a 2 ] [ 0 12 a 2 ] [ 1 10 a 2 ] [ 1 11 a 2 ] [ 1 12 a 2 ] [ 1 13 a 2 ] [ 1 14 a 2 ]
+;    Pin Number                : 8 / 9 / 10 / 11 / 12 / 10 / 11 / 12 / 13 / 14
+;    Pin Mode                  : a (Alternative)
+;    Alternative               : 2 (PWM)
+; 
+; PCU (PA/B/E/Fx)
+; 1. Port Group                : 0 / 1 / 4 / 5 (PCU Port A / B / E / F)
+;
+; 2. Port                      : [ 0 14 a 2 ] [ 0 15 a 2 ] [ 1 0 a 2 ] [ 1 1 a 2 ] [ 1 2 a 2 ] [ 1 3 a 2 ] [ 5 4 a 2 ] [ 5 5 a 2 ] [ 4 3 a 2 ] [ 4 4 a 2 ]
+;    Pin Number                : 14 / 15 / 0 / 1 / 2 / 3 / 4 / 5 / 3 / 4
+;    Pin Mode                  : a (Alternative)
+;    Alternative               : 2 (PWM)
+
+; PCU (PDx)
+sendln 'cm pcu'
+mpause 30
+sendln 'port 0 8 a 2'
+mpause 30
+sendln 'port 0 9 a 2'
+mpause 30
+sendln 'port 0 10 a 2'
+mpause 30
+sendln 'port 0 11 a 2'
+mpause 30
+sendln 'port 0 12 a 2'
+mpause 30
+sendln 'port 1 10 a 2'
+mpause 30
+sendln 'port 1 11 a 2'
+mpause 30
+sendln 'port 1 12 a 2'
+mpause 30
+sendln 'port 1 13 a 2'
+mpause 30
+sendln 'port 1 14 a 2'
+mpause 30
+
+; PCU (PEx)
+sendln 'port 0 14 a 2'
+mpause 30
+sendln 'port 0 15 a 2'
+mpause 30
+sendln 'port 1 0 a 2'
+mpause 30
+sendln 'port 1 1 a 2'
+mpause 30
+sendln 'port 1 2 a 2'
+mpause 30
+sendln 'port 1 3 a 2'
+mpause 30
+sendln 'port 5 4 a 2'
+mpause 30
+sendln 'port 5 5 a 2'
+mpause 30
+sendln 'port 4 3 a 2'
+mpause 30
+sendln 'port 4 4 a 2'
+mpause 30
+
+; PWM 
+sendln 'cm pwm'
+mpause 30
+sendln 'uninit 0'
+mpause 30
+sendln 'init 0'
+mpause 30
+sendln 'clk 0 p e 249 16'
+mpause 30
+sendln 'config 0 i n d 4000 2000'
+mpause 30
+sendln 'init 1'
+mpause 30
+sendln 'clk 1 p e 249 16'
+mpause 30
+sendln 'config 1 i n d 4000 2000'
+mpause 30
+sendln 'init 2'
+mpause 30
+sendln 'clk 2 p e 249 16'
+mpause 30
+sendln 'config 2 i n d 4000 2000'
+mpause 30
+sendln 'init 3'
+mpause 30
+sendln 'clk 3 p e 249 16'
+mpause 30
+sendln 'config 3 i n d 4000 2000'
+mpause 30
+sendln 'init 4'
+mpause 30
+sendln 'clk 4 p e 249 16'
+mpause 30
+sendln 'config 4 i n d 4000 2000'
+mpause 30
+sendln 'init 5'
+mpause 30
+sendln 'clk 5 p e 249 16'
+mpause 30
+sendln 'config 5 i n d 4000 2000'
+mpause 30
+sendln 'init 6'
+mpause 30
+sendln 'clk 6 p e 249 16'
+mpause 30
+sendln 'config 6 i n d 4000 2000'
+mpause 30
+sendln 'init 7'
+mpause 30
+sendln 'clk 7 p e 249 16'
+mpause 30
+sendln 'config 7 i n d 4000 2000'
+mpause 30
+sendln 'init 8'
+mpause 30
+sendln 'clk 8 p e 249 16'
+mpause 30
+sendln 'config 8 i n d 4000 2000'
+mpause 30
+sendln 'init 9'
+mpause 30
+sendln 'clk 9 p e 249 16'
+mpause 30
+sendln 'config 9 i n d 4000 2000'
+mpause 30
+sendln 'log on'
+mpause 30
+sendln 'start 0'
+mpause 500 
+sendln 'start 1'
+mpause 500
+sendln 'start 2'
+mpause 500
+sendln 'start 3'
+mpause 500
+sendln 'start 4'
+mpause 500
+sendln 'start 5'
+mpause 500
+sendln 'start 6'
+mpause 500
+sendln 'start 7'
+mpause 500
+sendln 'start 8'
+mpause 500
+sendln 'start 9'

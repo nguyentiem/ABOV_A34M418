@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<flash_device>
+  <exe>$PROJ_DIR$\..\..\..\..\..\ProductConfig\A34L71x\FPA\FlashLoader\a34l71x_code.out</exe>
+  <page>2048</page>
+  <block>128 0x800</block>
+  <flash_base>0x00000000</flash_base>
+  <aggregate>1</aggregate>
+</flash_device>
+
+

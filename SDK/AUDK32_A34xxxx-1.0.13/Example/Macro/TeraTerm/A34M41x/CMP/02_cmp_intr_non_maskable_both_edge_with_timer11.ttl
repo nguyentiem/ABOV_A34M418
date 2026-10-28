@@ -1,0 +1,104 @@
+; A. Description
+;    A list of commands here configures CMP and generates non-maskable both edge detected interrupt.
+;
+; B. Preparation
+;    Supply reference and source signal to specific port by a suitable instrument.
+;
+; C. Prerequisite Example (abov_example_config.h)
+;    1. CMP
+;    2. Timer1
+;    3. PCU/GPIO
+;
+; D. Default Port
+;    1. CMP0    : PA4 (CP0A)
+;               : PA7 (CREF0)
+;    2. Timer13 : PD13 (Output/Capture Input/External Clock Input)
+;
+; E. Port Connection
+;    1. PD13 (Timer13 Output) ----> PA4 (CP0A)
+;
+; For more information, read a user's manual of the target device carefully.
+;
+; CMP0
+; 1. Config                     : [ 0 n 0 0 h b -dbc 0 15 0 ]
+;    Operation                  : n (Non Maskable Interrupt)
+;    Source                     : 0 (CP0A)
+;    Reference                  : 0 (CREF0)
+;    Hysteresis                 : h (High)
+;    Trigger Mode               : b (both edge)
+;    Debounce/Noise Filter (-dbc)     
+;    Clock Divide               : 0 (No Clock Divider available so default 0)
+;    Debounce Count             : 15
+;    LSI Clock Enable           : d (No LSI Clock available so default d)
+;
+; Timer13
+; 1. Channel                   : 3 (Timer13)
+;
+; 2. Clock                     : [ 3 m h 10 1000 ]
+;    Source                    : m ( MCCR : Misc Clock )
+;    MCCR Source               : h ( HSI : High Speed Internal Clock - 32MHz )
+;    Source Divide             : 10 
+;    Timer1 Pre-Divide         : 1000 ( MCCR Clock / 10 ) / 1000
+;
+; 3. Config                    : [ 3 i p h 3200 3200 -io o ]
+;    Operation                 : i (Interrupt)
+;    Mode                      : p (Period)
+;    Output Port Polarity      : h (High)
+;    A Data                    : 3200
+;    B Data                    : 3200
+;    Port In/Out (-io)         : o (Output)
+;
+; PCU (PD13)
+; 1. Port Group                : 3 (PCU Port D)
+;
+; 2. Port                      : [ 3 13 a 2 ]
+;    Pin Number                : 13 
+;    Pin Mode                  : a (Alternative)
+;    Alternative               : 2 (T3IO)
+;
+; PCU (PA4)
+; 1. Port Group                : 0 (PCU Port A)
+;
+; 2. Port                      : [ 0 4 a 7 ]
+;    Pin Number                : 4
+;    Pin Mode                  : a (Alternative)
+;    Alternative               : 7 (CP0A)
+;
+; PCU (PD13)
+sendln 'cm pcu'
+mpause 30
+sendln 'port 3 13 a 2'
+mpause 30
+
+; PCU (PA4)
+sendln 'port 0 4 a 7'
+mpause 30
+
+; Timer13
+sendln 'cm timer1'
+mpause 30
+sendln 'uninit 3'
+mpause 30
+sendln 'init 3'
+mpause 30
+sendln 'clk 3 m h 10 1000'
+mpause 30
+sendln 'config 3 i p h 3200 3200'
+mpause 30
+sendln 'log off'
+mpause 30
+sendln 'start 3'
+mpause 30
+
+; CMP0
+sendln 'cm cmp'
+mpause 30
+sendln 'uninit 0'
+mpause 30
+sendln 'init 0'
+mpause 30
+sendln 'config 0 n 0 0 h b -dbc 0 15 d'
+mpause 30
+sendln 'log on 0'
+mpause 30
+sendln 'start 0'

@@ -1,0 +1,3 @@
+Layer Pairs Export File for PCB: D:\MyProject\PCAD\MDS\DEMO\Starter Kit\Starter Kit 32bits\Starter Kit_A34M418\STK-A34M418-YLN-A V2.0\STK-A34M418-YLN-A.PcbDoc
+LayersSetName=Top_Bot_Thru_Holes|DrillFile=stk-a34m418-yln-a-roundholes.txt|DrillLayers=gtl,gbl
+LayersSetName=Top_Bot_Slot_Holes|DrillFile=stk-a34m418-yln-a-slotholes.txt|DrillLayers=gtl,gbl

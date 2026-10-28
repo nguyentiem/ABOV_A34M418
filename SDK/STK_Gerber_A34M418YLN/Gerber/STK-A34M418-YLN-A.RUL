@@ -1,0 +1,6 @@
+DRC Rules Export File for PCB: D:\MyProject\PCAD\MDS\DEMO\Starter Kit\Starter Kit 32bits\Starter Kit_A34M418\STK-A34M418-YLN-A V2.0\STK-A34M418-YLN-A.PcbDoc
+RuleKind=Clearance|RuleName=Clearance_Poly|Scope=Board|Minimum=10.00
+RuleKind=Clearance|RuleName=Clearance|Scope=Board|Minimum=6.00
+RuleKind=ShortCircuit|RuleName=ShortCircuit|Scope=Board|Allowed=0
+RuleKind=SolderMaskExpansion|RuleName=SolderMaskExpansion|Scope=Board|Minimum=1.00
+RuleKind=Width|RuleName=Default Width|Scope=Board|Minimum=10.00

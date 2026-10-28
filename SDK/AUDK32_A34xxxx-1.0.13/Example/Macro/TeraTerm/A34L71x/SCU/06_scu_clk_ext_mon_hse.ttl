@@ -1,0 +1,31 @@
+; A. Description
+;    A list of commands here configures SCU CLK and generates HSE Clock Monitor Failure interrupt.
+;
+; B. Preparation
+;    N/A
+;
+; C. Prerequisite Example (abov_example_config.h)
+;    1. SCUCLK
+;
+; For more information, read a user's manual of the target device carefully.
+;
+; SCUCLK
+; 1. MON                 : [ e e m 3 ]
+;    Clock Source        : e (HSE : High Speed External Clock)
+;    Monitor Enable      : e (Enable)
+;    Interrupt Mode      : m (Maskable Interrupt)
+;    Priority            : 3
+;
+; 2. CLKEN               : [ e e ] [ e d ]
+;    Clock Source        : e (HSE : High Speed External Clock)
+;    Clock Enable        : e (Enable) / d (Disable)
+;
+; SCUCLK
+sendln 'cm scuclk'
+mpause 30
+sendln 'clken e e'
+mpause 30
+sendln 'mon e e m 3'
+pause 5
+sendln 'clken e d'
+

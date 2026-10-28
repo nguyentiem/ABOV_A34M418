@@ -1,0 +1,584 @@
+; A. Description
+;    This script automatically executes WDT, FRT, CRC, AES, RNG, FMC, some of Timer1, ADC, some of PCU, and SCU Tera Term example scripts.
+;
+; B. Prerequisite Example (abov_example_config.h)
+;    1. PCU/GPIO
+;    2. WDT
+;    3. FRT
+;    4. FMC
+;    5. SCU
+;    6. Timer1
+;    7. ADC
+;    8. AES
+;    9. CRC
+;    10. RNG
+;    11. MPWM
+;
+; C. Port Connection
+;    1. ADC
+;       : PC4 (Timer10 Output) ----> PA5 (AN5)
+;       : PB0 (MPWM0) ----> PA6 (AN6)
+;       : PB1 (MPWM0) ----> PA7 (AN7)
+;       : PB2 (MPWM0) ----> PA8 (AN8)
+;       : PB4 (MPWM0) ----> PA10 (AN10)
+;    2. PCU
+;       : PA0 (Output) ----> PE0 (Input)
+
+timeout=3000
+Passstr='===== Test Result : Pass ====='#13#10
+Failstr='===== Test Result : Fail ====='#13#10
+Reviewstr='===== Test Result : Need Review ===='#13#10
+NeedReview=0
+
+getdir mdir
+foldercreate 'Result'
+
+fileret='01_Autotest_Result_WDT_FRT_CRC_AES_FMC_PCU_SCU_ADC_TIMER1'
+sprintf2 retfilename '%s\Result\%s.txt' mdir fileret
+sprintf2 delfilename 'Result\%s.txt' fileret
+filedelete delfilename
+fileopen frethnd retfilename 0
+
+call tcwdt
+call tcfrt
+call tccrc
+call tcaes
+call tcrng
+call tcpcu
+call tcscu
+call tctimer1
+call tcadc
+call tcfmc
+
+fileclose frethnd
+dispstr 'End of 1. Auto Test WDT/FRT/CRC/FMC/PCU/SCU/ADC/AFE/Timer1'
+dispstr 10
+dispstr 'Must process the remained PCU/SCU TC.'
+end
+
+:tcwdt
+; ===== START : TestCase WDT =====
+dispstr 10 10
+dispstr '===== START : TestCase WDT ====='
+dispstr 10
+
+ipstr='WDT'
+foldercreate ipstr
+
+filestr='01_wdt_intr_maskable_underflow'
+chkstr='WDT : (0) U evt fired'
+delay=5
+call dotest
+sendln 'stop 0'
+pause 1
+
+filestr='02_wdt_intr_non_maskable_underflow'
+chkstr='WDT : (0) U evt fired'
+delay=5
+call dotest
+sendln 'stop 0'
+pause 1
+
+filestr='03_wdt_intr_reset'
+chkstr='= Executable module list ='
+delay=10
+call dotest
+
+; ===== END : TestCase WDT =====
+dispstr 10
+dispstr '===== END : TestCase WDT ====='
+dispstr 10
+return
+
+:tcfrt
+; ===== START : TestCase FRT =====
+dispstr 10 10
+dispstr '===== START : TestCase FRT ====='
+dispstr 10
+
+ipstr='FRT'
+foldercreate ipstr
+
+filestr='01_frt_intr_match'
+chkstr='FRT : (0) M evt fired'
+delay=5
+call dotest
+sendln 'stop 0'
+pause 1
+
+filestr='02_frt_intr_overflow'
+chkstr='FRT : (0) O(free) evt fired' 
+delay=300
+call dotest
+sendln 'stop 0'
+pause 1
+
+filestr='03_frt_intr_non_maskable_match'
+chkstr='FRT : (0) M evt fired'
+delay=5
+call dotest
+sendln 'stop 0'
+pause 1
+
+; ===== END : TestCase FRT =====
+dispstr 10
+dispstr '===== END : TestCase FRT ====='
+dispstr 10
+return
+
+:tcfmc
+; ===== START : TestCase FMC =====
+dispstr 10 10
+dispstr '===== START : TestCase FMC ====='
+dispstr 10
+
+ipstr='FMC'
+foldercreate ipstr
+
+filestr='01_flash'
+chkstr='End of Flash'
+delay=1
+NeedReview=1
+call dotest
+NeedReview=0
+
+; ===== END : TestCase FMC =====
+dispstr 10
+dispstr '===== END : TestCase FMC ====='
+dispstr 10
+return
+
+:tcpcu
+; ===== START : TestCase PCU =====
+dispstr 10 10
+dispstr '===== START : TestCase PCU ====='
+dispstr 10
+
+ipstr='PCU'
+foldercreate ipstr
+
+filestr='02_pcu_input_port_read'
+delay=0
+NeedReview=1
+call dotest
+NeedReview=0
+
+ipstr='PCU'
+filestr='04_pcu_output_port_level_change_and_input_port_read'
+delay=0
+NeedReview=1
+call dotest
+NeedReview=0
+
+ipstr='PCU'
+filestr='05_pcu_input_port_intr_with_output_port'
+delay=0
+NeedReview=1
+call dotest
+NeedReview=0
+
+ipstr='PCU'
+filestr='06_pcu_input_port_intr_non_maskable_with_output_port'
+delay=0
+NeedReview=1
+call dotest
+NeedReview=0
+
+; ===== END : TestCase PCU =====
+dispstr 10
+dispstr '===== END : TestCase PCU ====='
+dispstr 10
+return
+
+:tcscu
+; ===== START : TestCase SCU =====
+dispstr 10 10
+dispstr '===== START : TestCase SCU ====='
+dispstr 10
+
+ipstr='SCU'
+foldercreate ipstr
+
+filestr='08_scu_reset'
+chkstr='= Executable module list ='
+delay=3
+call dotest
+
+; ===== END : TestCase SCU =====
+dispstr 10
+dispstr '===== END : TestCase SCU ====='
+dispstr 10
+return
+
+:tctimer1
+; ===== START : TestCase Timer1 =====
+dispstr 10 10
+dispstr '===== START : TestCase Timer1 ====='
+dispstr 10
+
+ipstr='Timer1'
+foldercreate ipstr
+
+filestr='01_timer1_intr_period'
+chkstr='TIMER1 : (0) P evt fire'
+delay=2
+call dotest
+sendln 'stop 0'
+pause 1
+
+filestr='02_timer1_intr_oneshot'
+chkstr='TIMER1 : (0) P evt fire'
+delay=1
+call dotest
+sendln 'stop 0'
+pause 1
+
+filestr='03_timer1_intr_pwm'
+chkstr='TIMER1 : (0) PWM P evt fire'
+delay=3
+call dotest
+sendln 'stop 0'
+pause 1
+
+; ===== END : TestCase Timer1 =====
+dispstr 10
+dispstr '===== END : TestCase Timer1 ====='
+dispstr 10
+return
+
+:tcadc
+; ===== START : TestCase ADC =====
+dispstr 10 10
+dispstr '===== START : TestCase ADC ====='
+dispstr 10
+
+ipstr='ADC'
+foldercreate ipstr
+
+filestr='01_adc_intr_single_1_sequence_data_with_timer1_input'
+chkstr=''
+delay=1
+NeedReview=1
+call dotest
+sendln 'stop 0'
+pause 1
+
+filestr='02_adc_intr_sequence_8_sequence_data'
+chkstr=''
+delay=10
+NeedReview=1
+call dotest
+sendln 'stop 0'
+pause 1
+
+filestr='03_adc_intr_burst_8_sequence_data'
+chkstr=''
+delay=10
+NeedReview=1
+call dotest
+sendln 'stop 0'
+pause 1
+
+filestr='04_adc_intr_multiple_8_sequence_data'
+chkstr=''
+delay=1
+NeedReview=1
+call dotest
+pause 1
+
+filestr='05_adc_intr_multiple_8_sequence_data_with_timer1'
+chkstr=''
+delay=1
+NeedReview=1
+call dotest
+mpause 30
+sendln 'cm timer1'
+mpause 30
+sendln 'stop 0'
+mpause 30
+sendln 'stop 1'
+mpause 30
+sendln 'stop 2'
+pause 1
+
+filestr='06_adc_intr_burst_8_sequence_data_with_mpwm0'
+chkstr=''
+delay=10
+NeedReview=1
+call dotest
+sendln 'stop 0'
+mpause 30
+sendln 'cm mpwm'
+mpause 30
+sendln 'stop 0 c'
+pause 1
+
+filestr='07_adc_intr_multiple_8_sequence_data_with_mpwm0'
+chkstr=''
+delay=10
+NeedReview=1
+call dotest
+sendln 'stop 0'
+mpause 30
+sendln 'cm mpwm'
+mpause 30
+sendln 'stop 0 c'
+pause 1
+
+filestr='08_adc_intr_single_1_sequence_data_compare_up_with_timer11_event_timer10_input'
+chkstr=''
+delay=90
+NeedReview=1
+call dotest
+mpause 30
+sendln 'stop 0'
+mpause 30
+sendln 'cmp 0 d'
+mpause 30
+sendln 'cm timer1'
+mpause 30
+sendln 'stop 0'
+mpause 30
+sendln 'stop 1'
+pause 1
+
+filestr='09_adc_intr_single_1_sequence_data_compare_down_with_timer11_event_timer10_input'
+chkstr=''
+delay=90
+NeedReview=1
+call dotest
+mpause 30
+sendln 'stop 0'
+mpause 30
+sendln 'cmp 0 d'
+mpause 30
+sendln 'cm timer1'
+mpause 30
+sendln 'stop 0'
+mpause 30
+sendln 'stop 1'
+pause 1
+
+filestr='10_adc_dma_multiple_8_sequence_data_with_mpwm0'
+chkstr=''
+delay=10
+NeedReview=1
+call dotest
+sendln 'stop 0'
+mpause 30
+sendln 'cm mpwm'
+mpause 30
+sendln 'stop 0 c'
+pause 1
+
+filestr='11_adc_intr_non_maskable_multiple_8_sequence_data_with_timer1'
+chkstr=''
+delay=1
+NeedReview=1
+call dotest
+sendln 'stop 0'
+mpause 30
+sendln 'cm timer1'
+mpause 30
+sendln 'stop 0'
+mpause 30
+sendln 'stop 1'
+mpause 30
+sendln 'stop 2'
+pause 1
+
+filestr='12_adc_dma_non_maskable_multiple_8_sequence_data_with_timer1'
+chkstr=''
+delay=1
+NeedReview=1
+call dotest
+sendln 'stop 0'
+mpause 30
+sendln 'cm timer1'
+mpause 30
+sendln 'stop 0'
+mpause 30
+sendln 'stop 1'
+mpause 30
+sendln 'stop 2'
+pause 1
+NeedReview=0
+
+; ===== END : TestCase ADC =====
+dispstr 10
+dispstr '===== END : TestCase ADC ====='
+dispstr 10
+return
+
+:tcaes
+; ===== START : TestCase AES =====
+dispstr 10 10
+dispstr '===== START : TestCase AES ====='
+dispstr 10
+
+ipstr='AES'
+foldercreate ipstr
+
+filestr='01_aes_128_intr_enc_dec'
+chkstr=''
+delay=10
+NeedReview=1
+call dotest
+sendln 'stop 0'
+pause 1
+
+filestr='02_aes_128_dma_enc_dec'
+chkstr=''
+delay=10
+NeedReview=1
+call dotest
+sendln 'stop 0'
+pause 1
+
+filestr='03_aes_128_poll_enc_dec'
+chkstr=''
+delay=10
+NeedReview=1
+call dotest
+sendln 'stop 0'
+pause 1
+
+filestr='04_aes_128_intr_non_maskable_enc_dec'
+chkstr=''
+delay=10
+NeedReview=1
+call dotest
+sendln 'stop 0'
+
+; ===== END : TestCase AFE =====
+dispstr 10
+dispstr '===== END : TestCase AFE ====='
+dispstr 10
+return
+
+:tccrc
+; ===== START : TestCase CRC =====
+dispstr 10 10
+dispstr '===== START : TestCase CRC ====='
+dispstr 10
+
+ipstr='CRC'
+foldercreate ipstr
+
+filestr='01_crc_poll_poly_7'
+chkstr='0xd'
+delay=1
+call dotest
+
+filestr='02_crc_poll_poly_8'
+chkstr='0x8f'
+delay=1
+call dotest
+
+filestr='03_crc_poll_poly_16'
+chkstr='0x826e'
+delay=2
+call dotest
+
+filestr='04_crc_poll_poly_32'
+chkstr='0xccdcd51e'
+delay=1
+call dotest
+
+filestr='05_crc_dma_poly_32'
+chkstr='0xccdcd51e (ISR)'
+delay=1
+call dotest
+
+filestr='06_crc_dma_non_maskable_poly_32'
+chkstr='0xccdcd51e (ISR)'
+delay=1
+call dotest
+
+; ===== END : TestCase CRC =====
+dispstr 10
+dispstr '===== END : TestCase CRC ====='
+dispstr 10
+return
+
+:tcrng
+; ===== START : TestCase RNG =====
+dispstr 10 10
+dispstr '===== START : TestCase RNG ====='
+dispstr 10
+
+ipstr='RNG'
+foldercreate ipstr
+
+filestr='01_rng_poll_loop'
+chkstr=''
+delay=10
+NeedReview=1
+call dotest
+sendln 'stop 0'
+pause 1
+
+filestr='02_rng_intr'
+chkstr=''
+delay=10
+NeedReview=1
+call dotest
+sendln 'stop 0'
+pause 1
+
+filestr='03_rng_intr_non_maskable'
+chkstr=''
+delay=10
+NeedReview=1
+call dotest
+sendln 'stop 0'
+pause 1
+
+; ===== END : TestCase RNG =====
+dispstr 10
+dispstr '===== END : TestCase RNG ====='
+dispstr 10
+return
+
+:dotest
+sprintf2 delfilename '%s\%s.log' ipstr filestr
+filedelete delfilename
+sprintf2 logfilename '%s\%s\%s.log' mdir ipstr filestr
+logopen logfilename 0 0
+sprintf2 logstr 'Test %s%s%s' filestr #13 #10
+logwrite logstr
+sprintf2 tcfile '..\%s\%s.ttl' ipstr filestr 
+include tcfile
+pause delay
+logclose
+call decision
+return
+
+:decision
+timeout=3000
+fileopen fhandle logfilename 0
+if NeedReview == 1 then
+    resultstr=Reviewstr
+else
+    filestrseek fhandle chkstr
+    if result=0 then
+        resultstr=Failstr
+    else 
+        resultstr=Passstr
+    endif
+endif
+
+fileseek fhandle 0 0
+do
+    filereadln fhandle line
+    filewriteln frethnd line
+loop while result == 0
+filewriteln frethnd resultstr
+filewriteln frethnd 0
+filewriteln frethnd 0
+fileclose fhandle
+NeedReview=0
+resultstr=''
+pause 1
+
+return

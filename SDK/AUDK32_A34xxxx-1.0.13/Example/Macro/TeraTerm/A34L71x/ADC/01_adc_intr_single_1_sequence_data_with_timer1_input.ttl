@@ -1,0 +1,126 @@
+; A. Description
+;    A list of commands here configures ADC and generates single capture interrupt.
+;
+; B. Preparation
+;    Connecting target port with a suitable instrument.
+;
+; C. Prerequisite Example (abov_example_config.h)
+;    1. ADC
+;    2. Timer1
+;    3. PCU/GPIO
+;    4. VREFBUF
+;
+; D. Default Port
+;    1. ADC0    : PD7 (AN18)
+;    2. Timer15 : PE1 (Output/Capture Input/External Clock Input)
+;
+; E. Port Connection
+;    1. PE1 (Timer15 Output) ----> PD7 (AN18)
+;
+; For more information, read a user's manual of the target device carefully.
+;
+; ADC0
+; 1. Channel                    : 0
+;
+; 2. Clock                      : [ 0 p 64 ]
+;    Source                     : p (Peripheral Clock)
+;    Peripheral Clock Divide    : 64
+;
+; 3. Config                     : [ config 0 i s a 1 0 ]
+;    Operation                  : i (Interrupt)
+;    Mode                       : s (Single)
+;    Base Trigger Source        : a (ADC Instant Start)
+;    Sequence Count             : 1
+;    Sampling Time              : 0
+;
+; 4. Seq                        : [ 0 a 0 18 0 ]
+;    Trigger Source             : a (ADC Instant Start)
+;    Sequence Number            : 0
+;    Input Channel              : 18
+;    Sampling Time              : 0
+;
+; Timer15
+; 1. Channel                    : 5 (Timer15)
+;
+; 2. Clock                      : [ 5 m h 4 64 -io o ]
+;    Source                     : m (MCCR : Misc Clock)
+;    MCCR Source                : h (HSI : High Speed Internal Clock - 32MHz)
+;    Source Divide              : 4 
+;    Timer1 Pre-Divide          : 64 (MCCR Clock / 4) / 64
+;
+; 3. Config                     : [ 5 i p h 13 13 ]
+;    Operation                  : i (Interrupt)
+;    Mode                       : p (Period)
+;    Output Port Polarity       : h (High)
+;    A Data                     : 13
+;    B Data                     : 13
+;    Port In/Out (-io)          : o (Output)
+;
+; PCU (PD7)
+; 1. Port Group                : 3 (PCU Port D)
+;
+; 2. Port                      : [ 3 7 a 7 ]
+;    Pin Number                : 7
+;    Pin Mode                  : a (Alternative)
+;    Alternative               : 7 (AN18)
+; 
+; PCU (PE1)
+; 1. Port Group                : 4 (PCU Port E)
+;
+; 2. Port                      : [ 4 1 a 2 ]
+;    Pin Number                : 1 
+;    Pin Mode                  : a (Alternative)
+;    Alternative               : 2 (T5IO)
+; 
+; PCU (PD7)
+sendln 'cm pcu'
+mpause 30
+sendln 'port 3 7 a 7'
+mpause 30
+
+; PCU (PE1)
+sendln 'port 4 1 a 2'
+mpause 30
+
+; VREFBUF
+sendln 'cm vrefbuf'
+mpause 30
+sendln 'uninit 0'
+mpause 30
+sendln 'init 0'
+mpause 30
+sendln 'config 0 p v 64000 1'
+mpause 100
+
+; Timer15
+sendln 'cm timer1'
+mpause 30
+sendln 'uninit 5'
+mpause 30
+sendln 'init 5'
+mpause 30
+sendln 'clk 5 m h 4 64'
+mpause 30
+sendln 'config 5 i p h 13 13' 
+mpause 30
+sendln 'log off'
+mpause 30
+sendln 'start 5'
+mpause 30
+
+; ADC0
+sendln 'cm adc'
+mpause 30
+sendln 'uninit 0'
+mpause 30
+sendln 'init 0'
+mpause 30
+sendln 'clk 0 p 64'
+mpause 30
+sendln 'config 0 i s a 1 0'
+mpause 30
+sendln 'seq 0 a 0 18 0'
+mpause 30
+sendln 'start 0'
+pause 2
+sendln 'dump 0'

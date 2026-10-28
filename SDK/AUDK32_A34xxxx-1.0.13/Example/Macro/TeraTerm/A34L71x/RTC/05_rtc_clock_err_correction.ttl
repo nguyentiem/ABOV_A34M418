@@ -1,0 +1,66 @@
+; A. Description
+;    A list of commands here configures RTC and compensates clock error rate.
+;
+; B. Preparation
+;    N/A
+;
+; C. Prerequisite Example (abov_example_config.h)
+;    1. RTC
+;
+; For more information, read a user's manual of the target device carefully.
+;
+; RTC0
+; 1. Channel                    : 0 (RTC 0)
+;
+; 2. Clock                      : [ 0 m l 10 ]
+;    Source                     : m (MCCR : Misc Clock)
+;    MCCR Source                : l (LSI : Low Speed Internal Clock - 750KHz)
+;    Source Divide              : 10 
+;
+; 3. Config                     : [ 0 i -err d 2 40000 ]
+;    Operation                  : Interrupt
+;    Error Correction Direction : d (Decrement)
+;    Error Correction Timing    : 2 (Every 20 second)
+;    Error Correction Data      : 40000
+;
+; 4. Clock(Time/Data)           : [ 0 22 5 4 3 11 59 55 s ] (2022/05/03 Thu PM 11:59:55)
+;    Year                       : 2022
+;    Month                      : 5
+;    Week                       : 4
+;    Day                        : 3
+;    Hour                       : 11
+;    Minute                     : 59
+;    Second                     : 55
+;    Event Period Mode          : s (Every 1 second)
+; 
+;                             fRTC              RTCCLK * 60 
+; Error Correction Data = (---------- - 1) * (---------------)
+;                            RTCCLK                 DEV
+;
+; fRTC   : Measuring RTC_OUT
+; RTCCLK : RTC Input Clock
+; DEV    : 3 (every 20-second) or 1 (every 60-second)
+; DIR    : Increment (Zero or Positive number of Error Correction Data)
+;          Decrement (Negative number of Error Correction Data)
+;
+; ex) RTCCLK : 75KHz, fRTC : 73KHz, DEV : 3 (every 20-second)
+;
+;                            73KHz             75KHz * 60 
+; Error Correction Data = (--------- - 1) * (--------------) = -40000
+;                            75KHz                  3
+;
+; Direction = Decrement (DIR = 0)
+; 
+sendln 'cm rtc'
+mpause 30
+sendln 'uninit 0'
+mpause 30
+sendln 'init 0'
+mpause 30
+sendln 'clk 0 m l 10'
+mpause 30
+sendln 'config 0 i -err d 2 40000'
+mpause 30
+sendln 'clock 0 22 5 4 3 11 59 55 s'
+mpause 30
+sendln 'start 0'

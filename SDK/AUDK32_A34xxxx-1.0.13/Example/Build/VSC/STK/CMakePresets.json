@@ -1,0 +1,51 @@
+{
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "AUDK32",
+            "hidden": true,
+            "binaryDir": "${sourceDir}/build",
+            "generator": "Ninja",
+            "environment": {
+                "PATH": "${sourceDir}/../../../../Tool/Ninja;$penv{PATH}"
+            },
+            "cacheVariables": {
+                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/../toolchain-gcc.cmake",
+                "PROJECT":"STK",
+                "PRODUCT":"A34xxxx"
+            }
+        },
+        {
+            "name": "A34M41x",
+            "inherits": "AUDK32",
+            "cacheVariables": {
+                "AUDK32_TARGET": "A34M41x",
+                "TARGET_BOARD":"A34M418-YLN"
+            }
+        },
+        {
+            "name": "A34M42x",
+            "inherits": "AUDK32",
+            "cacheVariables": {
+                "AUDK32_TARGET": "A34M42x",
+                "TARGET_BOARD":"A34M420-YLN"
+            }
+        },
+        {
+            "name": "A34L71x",
+            "inherits": "AUDK32",
+            "cacheVariables": {
+                "AUDK32_TARGET": "A34L71x",
+                "TARGET_BOARD":"A34L716-VLN"
+            }
+        },
+        {
+            "name": "A34G43x",
+            "inherits": "AUDK32",
+            "cacheVariables": {
+                "AUDK32_TARGET": "A34G43x",
+                "TARGET_BOARD":"A34G43A-YLN"
+            }
+        }
+    ]
+}

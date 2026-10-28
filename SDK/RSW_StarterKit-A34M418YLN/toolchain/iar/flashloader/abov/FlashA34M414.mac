@@ -1,0 +1,21 @@
+execUserFlashInit()
+{
+    __writeMemory32(0x00000004, 0x41000000, "Memory");  //CFMC_CONF = 4(wait), I/D cache off
+    __writeMemory32(0x00030004, 0x41000000, "Memory");  //CFMC_CONF = 4(wait), I/D cache reset <-1
+    __writeMemory32(0x00000004, 0x41000000, "Memory");  //CFMC_CONF = 4(wait), I/D cache reset <-0
+    __delay(5);
+}
+
+execUserFlashExit()
+{
+	 __message "----- Reset and Run Ver 1.0 ABOV A34M418VLM -----\n"; 
+//    __writeMemory32(0x5FA0004, 0xE000ED0C, "Memory");  //SCB->AIRCR = 0x5FA0004
+
+    __writeMemory32(0x57, 0x400000F0, "Memory");  //SCU_SYSTEM <-0x57
+    __writeMemory32(0x75, 0x400000F0, "Memory");  //SCU_SYSTEM <-0x75
+
+    __writeMemory32(0xF1, 0x40000018, "Memory");  //SCU_RSER <-0xF1 (swrst enable)
+    __writeMemory32(0x01, 0x40000008, "Memory");  //SCU_SRCR <-0x-01 (swrst start)
+
+    __delay(50);
+}

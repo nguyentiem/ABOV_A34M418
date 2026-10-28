@@ -1,0 +1,63 @@
+; A. Description
+;    A list of commands here configures LPUART and receives data.
+;
+; B. Preparation
+;    Connecting ports with a suitable instrument should be correct
+;
+; C. Prerequisite Example (abov_example_config.h)
+;    1. LPUART
+;    2. PCU/GPIO
+;
+; D. Default Port
+;    1. LPUART0 : PB15 (Transmit)
+;               : PC0 (Receive)
+
+; For more information, read a user's manual of the target device carefully.
+;
+; LPUART0
+; 1. Channel                   : 0 (LPUART0)
+;
+; 2. CLK                       : [ 0 m h 0 ]
+;    Source                    : m (MCCR : Misc Clock)
+;    MCCR Source               : h (HSI : High Speed Internal Clock - 32MHz)
+;    Source Divide             : 0 (Not available)
+;
+; 3. Config                    : [ 0 i 8 o 1 38400 ]
+;    Operation                 : i (Interrupt)
+;    Data Bit                  : 8 (8bit)
+;    Parity                    : o (odd)
+;    Stop Bit                  : 1 (1bit)
+;    Baudrate                  : 38400 bps
+;
+; 4. Rx                        : [ 0 8 ]
+;    Receive Data Length       : 8
+;
+; PCU (PB/Cx)
+; 1. Port Group                : 1 / 2 (PCU Port B/C)
+;
+; 2. Port                      : [ 1 15 a 3 -pupd p ] [ 2 0 a 3 -pupd p ]
+;    Pin Number                : 15 / 0 
+;    Pin Mode                  : a (Alternative)
+;    Alternative               : 3 (TX/RX)
+;    Pull-up/down              : p (Pull-up)
+;
+; PCU (PB/Cx)
+sendln 'cm pcu'
+mpause 30
+sendln 'port 1 15 a 3 -pupd p'
+mpause 30
+sendln 'port 2 0 a 3 -pupd p'
+mpause 30
+
+; LPUART0
+sendln 'cm lpuart'
+mpause 30
+sendln 'uninit 0'
+mpause 30
+sendln 'init 0'
+mpause 30
+sendln 'clk 0 m h 1'
+mpause 30
+sendln 'config 0 i 8 o 1 38400'
+mpause 30
+sendln 'rx 0 8'

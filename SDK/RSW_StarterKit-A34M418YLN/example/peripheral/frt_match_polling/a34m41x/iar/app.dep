@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+    <fileVersion>4</fileVersion>
+    <fileChecksum>3908259374</fileChecksum>
+    <configuration>
+        <name>Debug</name>
+        <outputs>
+            <file>$PROJ_DIR$\..\..\..\..\..\driver\a34m41x\source\a34m41x_uart.c</file>
+            <file>$PROJ_DIR$\..\..\..\..\..\library\debug\source\debug_cmd.c</file>
+            <file>$PROJ_DIR$\..\..\..\..\..\driver\a34m41x\source\a34m41x_dma.c</file>
+            <file>$PROJ_DIR$\..\..\..\..\..\driver\a34m41x\source\a34m41x_gpio.c</file>
+            <file>$PROJ_DIR$\..\a34m41x_debug.c</file>
+            <file>$PROJ_DIR$\..\a34m41x_system_setting.c</file>
+            <file>$PROJ_DIR$\..\..\main.c</file>
+            <file>$PROJ_DIR$\..\..\..\..\..\core\device\a34m41x\source\a34m41x_startup_iar.s</file>
+            <file>$PROJ_DIR$\..\a34m41x_port_init.c</file>
+            <file>$PROJ_DIR$\..\..\..\..\..\driver\a34m41x\source\a34m41x_frt.c</file>
+            <file>$PROJ_DIR$\..\..\..\..\..\core\device\a34m41x\source\a34m41x_system.c</file>
+            <file>$PROJ_DIR$\..\..\..\..\..\driver\a34m41x\source\a34m41x_scu.c</file>
+            <file>$PROJ_DIR$\Debug\Exe\app.out</file>
+            <file>$TOOLKIT_DIR$\inc\c\ycheck.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\debug_cmd.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\a34m41x_system.o</file>
+            <file>$TOOLKIT_DIR$\inc\c\yvals.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\stddef.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\DLib_Product.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\main.o</file>
+            <file>$PROJ_DIR$\..\..\..\..\..\library\debug\source\debug_serial.c</file>
+            <file>$PROJ_DIR$\Debug\Obj\a34m41x_system_setting.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\a34m41x_uart.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\debug_retarget.o</file>
+            <file>$PROJ_DIR$\..\..\..\..\..\library\debug\source\debug_log.c</file>
+            <file>$PROJ_DIR$\Debug\Obj\debug_log.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\debug_serial.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\a34m41x_startup_iar.o</file>
+            <file>$TOOLKIT_DIR$\inc\c\DLib_Config_Normal.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\ysizet.h</file>
+            <file>$PROJ_DIR$\..\..\..\..\..\core\device\a34m41x\include\a34m41x_system.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\stdint.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\DLib_Defaults.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\a34m41x_scu.o</file>
+            <file>$PROJ_DIR$\..\..\..\..\..\library\debug\source\debug_hardfault.c</file>
+            <file>$PROJ_DIR$\Debug\Obj\a34m41x_frt.o</file>
+            <file>$PROJ_DIR$\Debug\Exe\app.hex</file>
+            <file>$PROJ_DIR$\Debug\Obj\a34m41x_port_init.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\a34m41x_gpio.o</file>
+            <file>$PROJ_DIR$\..\..\..\..\..\library\debug\source\debug_retarget.c</file>
+            <file>$PROJ_DIR$\Debug\Obj\debug_hardfault.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\a34m41x_dma.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\a34m41x_debug.o</file>
+            <file>$PROJ_DIR$\..\main.h</file>
+            <file>$PROJ_DIR$\..\..\..\..\..\core\cmsis\include\cmsis_compiler.h</file>
+            <file>$PROJ_DIR$\..\..\..\..\..\driver\a34m41x\include\a34m41x_driver_common.h</file>
+            <file>$PROJ_DIR$\..\..\..\..\..\library\debug\include\debug_serial.h</file>
+            <file>$PROJ_DIR$\..\..\..\..\..\core\cmsis\include\core_cm4.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\stdio.h</file>
+            <file>$PROJ_DIR$\..\..\..\..\..\driver\a34m41x\include\a34m41x_frt.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\stdlib.h</file>
+            <file>$TOOLKIT_DIR$\config\linker\abov\a34m418.icf</file>
+            <file>$PROJ_DIR$\..\..\..\..\..\core\cmsis\include\cmsis_iccarm.h</file>
+            <file>$TOOLKIT_DIR$\lib\shb_l.a</file>
+            <file>$TOOLKIT_DIR$\lib\m7M_tls.a</file>
+            <file>$PROJ_DIR$\..\..\..\..\..\core\device\a34m41x\include\a34m41x.h</file>
+            <file>$TOOLKIT_DIR$\lib\dl7M_tln.a</file>
+            <file>$PROJ_DIR$\..\..\..\..\..\core\cmsis\include\mpu_armv7.h</file>
+            <file>$PROJ_DIR$\..\..\..\..\..\driver\a34m41x\include\a34m41x_dma.h</file>
+            <file>$PROJ_DIR$\..\..\..\..\..\core\cmsis\include\cmsis_version.h</file>
+            <file>$PROJ_DIR$\..\..\..\..\..\library\debug\include\debug_log.h</file>
+            <file>$PROJ_DIR$\..\..\..\..\..\library\debug\include\debug_cmd.h</file>
+            <file>$PROJ_DIR$\..\..\..\..\..\driver\a34m41x\include\a34m41x_gpio.h</file>
+            <file>$TOOLKIT_DIR$\lib\rt7M_tl.a</file>
+            <file>$PROJ_DIR$\Debug\List\app.map</file>
+            <file>$TOOLKIT_DIR$\inc\c\iccarm_builtin.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\DLib_Product_string.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\DLib_Product_stdlib.h</file>
+            <file>$PROJ_DIR$\..\..\..\..\..\driver\a34m41x\include\a34m41x_uart.h</file>
+            <file>$PROJ_DIR$\..\..\..\..\..\driver\a34m41x\include\a34m41x_scu.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\stdarg.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\string.h</file>
+        </outputs>
+        <file>
+            <name>[ROOT_NODE]</name>
+            <outputs>
+                <tool>
+                    <name>ILINK</name>
+                    <file> 12 64</file>
+                </tool>
+            </outputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\driver\a34m41x\source\a34m41x_uart.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 22</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 31 13 16 32 28 18 71 29 66 55 47 59 44 52 65 57 30 69 45 68 58</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\library\debug\source\debug_cmd.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 14</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 48 13 16 32 28 18 29 71 66 60 31 61 46</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\driver\a34m41x\source\a34m41x_dma.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 41</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 50 13 16 32 28 18 29 67 31 71 66 55 47 59 44 52 65 57 30 69 45 58</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\driver\a34m41x\source\a34m41x_gpio.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 38</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 48 13 16 32 28 18 29 62 31 55 47 59 44 52 65 57 30 45 69</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\a34m41x_debug.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 42</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 31 13 16 32 28 18 17 29 30 62 55 47 59 44 52 65 57 45 68 58 46 71 66 60 48 43 49</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\a34m41x_system_setting.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 21</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 43 55 47 31 13 16 32 28 18 59 44 52 65 57 30 49 45 69</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\main.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 19</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 31 13 16 32 28 18 48 29 43 55 47 59 44 52 65 57 30 49 45 61 60</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\core\device\a34m41x\source\a34m41x_startup_iar.s</name>
+            <outputs>
+                <tool>
+                    <name>AARM</name>
+                    <file> 27</file>
+                </tool>
+            </outputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\a34m41x_port_init.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 37</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 43 55 47 31 13 16 32 28 18 59 44 52 65 57 30 49 45 62</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\driver\a34m41x\source\a34m41x_frt.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 35</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 71 13 16 32 28 18 29 66 55 47 31 59 44 52 65 57 30 69 45 49</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\core\device\a34m41x\source\a34m41x_system.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 15</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 31 13 16 32 28 18 55 47 59 44 52 65 57 30</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\driver\a34m41x\source\a34m41x_scu.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 33</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 31 13 16 32 28 18 71 29 66 69 55 47 59 44 52 65 57 30 45</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\Debug\Exe\app.out</name>
+            <outputs>
+                <tool>
+                    <name>OBJCOPY</name>
+                    <file> 36</file>
+                </tool>
+                <tool>
+                    <name>ILINK</name>
+                    <file> 64</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ILINK</name>
+                    <file> 51 42 41 35 38 37 33 27 15 21 22 14 40 25 23 26 19 53 63 54 56</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\library\debug\source\debug_serial.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 26</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 48 13 16 32 28 18 29 50 67 44 31 52 65 46 71 66</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\library\debug\source\debug_log.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 25</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 48 13 16 32 28 18 29 70 31 60</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\library\debug\source\debug_hardfault.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 40</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 31 13 16 32 28 18</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\library\debug\source\debug_retarget.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 23</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 48 13 16 32 28 18 29 31 46 71 66</file>
+                </tool>
+            </inputs>
+        </file>
+    </configuration>
+    <configuration>
+        <name>Release</name>
+        <outputs />
+        <forcedrebuild>
+            <name>[MULTI_TOOL]</name>
+            <tool>ILINK</tool>
+        </forcedrebuild>
+    </configuration>
+</project>

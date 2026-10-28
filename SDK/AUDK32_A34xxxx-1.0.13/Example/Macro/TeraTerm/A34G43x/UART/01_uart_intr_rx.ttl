@@ -1,0 +1,63 @@
+; A. Description
+;    A list of commands here configures UART and receives data.
+;
+; B. Preparation
+;    Connecting ports with a suitable instrument should be correct
+;
+; C. Prerequisite Example (abov_example_config.h)
+;    1. UART
+;    2. PCU/GPIO
+;
+; D. Default Port
+;    1. UART11  : PG5 (Receive)
+;               : PG6 (Transmit)
+;
+; For more information, read a user's manual of the target device carefully.
+;
+; UART11
+; 1. Channel                   : 11 (UART11)
+;
+; 2. CLK                       : [ 11 m m 2 ]
+;    Source                    : m (MCCR : Misc Clock)
+;    MCCR Source               : m (MCLK : Main Clock)
+;    Source Divide             : 2
+;
+; 3. Config                    : [ 11 i 8 o 1 38400 ]
+;    Operation                 : i (Interrupt)
+;    Data Bit                  : 8 (8bit)
+;    Parity                    : o (odd)
+;    Stop Bit                  : 1 (1bit)
+;    Baudrate                  : 38400 bps
+;
+; 4. Rx                        : [ 11 8 ]
+;    Receive Data Length       : 8
+;
+; PCU (PGx)
+; 1. Port Group                : 6 (PCU Port G)
+;
+; 2. Port                      : [ 6 6 a 1 -pupd p ] [ 6 5 a 1 -pupd p ]
+;    Pin Number                : 6 / 5
+;    Pin Mode                  : a (Alternative)
+;    Alternative               : 1 (TX/RX)
+;    Pull-up/down              : p (Pull-up)
+;
+; PCU (PGx)
+sendln 'cm pcu'
+mpause 30
+sendln 'port 6 6 a 1 -pupd p'
+mpause 30
+sendln 'port 6 5 a 1 -pupd p'
+mpause 30
+
+; UART11
+sendln 'cm uart'
+mpause 30
+sendln 'uninit 11'
+mpause 30
+sendln 'init 11'
+mpause 30
+sendln 'clk 11 m m 2'
+mpause 30
+sendln 'config 11 i 8 o 1 38400'
+mpause 30
+sendln 'rx 11 8'

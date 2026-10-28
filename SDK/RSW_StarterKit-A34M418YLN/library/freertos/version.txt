@@ -1,0 +1,1 @@
+This is FreeRTOS v10.2.1 copied for ABOV Semiconductor SDK.

@@ -1,0 +1,62 @@
+; A. Description
+;    A list of commands here configures PCU module and generates non-maskable input interrupt via the signal from output port.
+;
+; B. Preparation
+;    Connecting target port with a suitable instrument.
+;
+; C. Prerequisite Example (abov_example_config.h)
+;    1. PCU/GPIO
+;
+; D. Default Port
+;    1. PCU     : PA9 (Input)
+;               : PA10 (Output)
+;
+; E. Port Connection
+;    1. PA10 (Output) ----> PA9 (Input)
+;
+; For more information, read a user's manual of the target device carefully.
+;
+; PCU (PA9)
+; 1. Port Group                   : 0 (PCU Port A)
+;
+; 2. Port                         : [ 0 9 i i -intr n e b ] 
+;    Pin Number                   : 9
+;    Pin Mode                     : i (Input)
+;    Pin Input Mode               : i (Normal Input)
+;    Pin Operation Mode           : n (Non Maskable Interrupt)
+;    Pin Interrupt Mode           : e (Edge)
+;    Pin Interrupt Trigger Edge   : b (Both Edge)
+;
+; PCU (PA10)
+; 1. Port Group                   : 0 (PCU Port A)
+;
+; 2. Port                         : [ 0 10 o p h ]
+;    Pin Number                   : 10
+;    Pin Mode                     : o (Output)
+;    Pin Output Mode              : p (Push-Pull)
+;    Pin Level                    : h (High)
+;
+; 3. Output                       : [ 0 10 l / h ]
+;    Pin Number                   : 10
+;    Pin Level                    : l (Low) / h (High)
+;
+; PCU (PA10)
+sendln 'cm pcu'
+mpause 30
+sendln 'port 0 10 o p h'
+mpause 30
+
+; PCU (PA9)
+sendln 'port 0 9 i i -intr n e b'
+mpause 30
+
+i = 30
+do while i > 0
+    i = i - 1
+    if i%2 = 0 then
+        sendln 'output 0 10 l'
+    else
+        sendln 'output 0 10 h'
+    endif
+    pause 1
+loop

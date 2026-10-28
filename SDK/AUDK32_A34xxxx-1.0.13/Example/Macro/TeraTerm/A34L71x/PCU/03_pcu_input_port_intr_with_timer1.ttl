@@ -1,0 +1,77 @@
+; A. Description
+;    A list of commands here configures PCU module and generates input interrupt via the signal from timer1.
+;
+; B. Preparation
+;    Connecting target port with a suitable instrument.
+;
+; C. Prerequisite Example (abov_example_config.h)
+;    1. PCU/GPIO
+;    2. Timer1
+;
+; D. Default Port
+;    1. PCU     : PB10 (Input)
+;    2. Timer17 : PB11 (Output/Capture Input/External Clock Input)
+;
+; E. Port Connection
+;    1. PB11 (Timer17 Output) ----> PB10 (Input)
+;
+; For more information, read a user's manual of the target device carefully.
+;
+; PCU (PB10)
+; 1. Port Group                   : 0 (PCU Port B)
+;
+; 2. Port                         : [ 1 10 i i -intr i e r ]
+;    Pin Number                   : 10
+;    Pin Mode                     : i (Input)
+;    Pin Input Mode               : i (Normal Input)
+;    Pin Operation Mode           : i (Interrupt)
+;    Pin Interrupt Mode           : e (Edge)
+;    Pin Interrupt Trigger Edge   : r (Rising)
+;
+; Timer17
+; 1. Channel                      : 7 (Timer17)
+;
+; 2. Clock                        : [ 7 m h 10 1000]
+;    Source                       : m (MCCR : Misc Clock)
+;    MCCR Source                  : h (HSI : High Speed Internal Clock - 32MHz)
+;    Source Divide                : 10 
+;    Timer1 Pre-Divide            : 1000 (MCCR Clock / 10) / 1000
+;
+; 3. Config                       : [ 7 i p h 3200 3200 -io o ]
+;    Operation                    : i (Interrupt)
+;    Mode                         : p (Period)
+;    Output Port Polarity         : h (High)
+;    A Data                       : 3200
+;    B Data                       : 3200
+;    Port In/Out (-io)            : o (Output)
+;
+; PCU (PB11)
+; 1. Port Group                : 1 (PCU Port B)
+;
+; 2. Port                      : [ 1 11 a 2 ]
+;    Pin Number                : 11
+;    Pin Mode                  : a (Alternative)
+;    Alternative               : 2 (T7IO)
+; 
+; PCU (PB10)
+sendln 'cm pcu'
+mpause 30
+sendln 'port 1 10 i i -intr i e r'
+mpause 30
+
+; PCU (PB11)
+sendln 'port 1 11 a 2'
+mpause 30
+
+; Timer17
+sendln 'cm timer1'
+mpause 30
+sendln 'uninit 7'
+mpause 30
+sendln 'init 7'
+mpause 30
+sendln 'clk 7 m h 10 1000'
+mpause 30
+sendln 'config 7 i p h 3200 3200 -io o'
+mpause 30
+sendln 'start 7'

@@ -1,0 +1,166 @@
+; A. Description
+;    A list of commands here configures FMC and erase and write code flash
+;
+; B. Preparation
+;    Setup ARM debugger to connect device without reset to see registers and flash memory
+;
+; C. Prerequisite Example (abov_example_config.h)
+;    1. Flash
+;
+; For more information, read a user's manual of the target device carefully.
+;
+; 1. Code Flash Size : 0x20000(On REQ)/0x40000(On REQ)/0x80000(MP)
+;    0x80000 is taken as flash size to test
+; 2. Data Flash Size : 0x8000
+; 3. Code Write Protection Size : 0x8000
+; 4. Data Write Protection Size : 0x800
+; 5. Erase Mode
+;    - FMC_CHIP_ERASE_MODE = 0
+;    - FMC_PAGE_ERASE_MODE = 1
+;    - FMC_1KB_ERASE_MODE  = 2
+;    - FMC_2KB_ERASE_MODE  = 4
+;    - FMC_4KB_ERASE_MODE  = 8
+;    FMC_4KB_ERASE_MODE is taken to test code flash.
+;    FMC_1KB_ERASE_MODE is taken to test data flash.
+
+;;;;;;;;;;;;;;;;;;;;;;    Define Variables ;;;;;;;;;;;;;;;;;;;;;
+FMC_ID_CFMC = 0
+FMC_ID_DFMC = 1
+
+FMC_CHIP_ERASE_MODE = 0
+FMC_PAGE_ERASE_MODE = 1
+FMC_1KB_ERASE_MODE  = 2
+FMC_2KB_ERASE_MODE  = 4
+FMC_4KB_ERASE_MODE  = 8
+
+CODE_FLASH_SIZE  = 2097152
+CODE_SECTOR_32KB = 32768
+DATA_FLASH_SIZE  = 32768
+DATA_SECTOR_2KB  = 2048
+
+CODE_START_TEST_ADR = CODE_FLASH_SIZE - CODE_SECTOR_32KB
+DATA_START_TEST_ADR = DATA_FLASH_SIZE - DATA_SECTOR_2KB
+SIZE_512B  = 512
+SIZE_2KB = 2048
+SIZE_4KB = 4096
+
+; 0x0E000000 = 234881024
+DATA_START_PHY_ADR = 234881024 + DATA_START_TEST_ADR
+DUMP_ADDR = CODE_START_TEST_ADR
+DUMP_LEN = DATA_SECTOR_2KB
+DUMP_PAUSE = 5
+DISP_MESSAGE = ""
+;;;;;;;;;;;;;;  Test commands here for Code Flash ;;;;;;;;;;;;;
+sendln 'cm fmc'
+mpause 20
+
+; Print flash geometric information
+sprintf2 DISP_MESSAGE "01.Print flash geometric information"
+call display_message
+sendln 'info'
+pause 3
+
+; Unprotect all code flash area
+sprintf2 DISP_MESSAGE "02.Unprotect all code/data flash area"
+call display_message
+sprintf2 cmd "wprot %d 0xFFFFFFFF 0 0" FMC_ID_CFMC
+sendln cmd
+mpause 40
+
+sprintf2 cmd "wprot %d 0xFFFFFFFF 0 0" FMC_ID_DFMC
+sendln cmd
+pause 3
+
+; Erase 32KB at CODE FLASH_SIZE
+sprintf2 DISP_MESSAGE "03.Erase 32KB code flash area at 0x%08X" CODE_START_TEST_ADR
+call display_message
+pause 3
+
+i = 0
+do while i < 8
+    sprintf2 cmd "erase %d 0x%x %d" FMC_ID_CFMC CODE_START_TEST_ADR+(SIZE_4KB*i) FMC_4KB_ERASE_MODE
+    sendln cmd
+    mpause 300
+    i = i + 1;
+loop
+
+sprintf2 DISP_MESSAGE "04.Dump memory (0x%08X ~ 0x%08X)" CODE_START_TEST_ADR (CODE_START_TEST_ADR+CODE_SECTOR_32KB-1)
+call display_message
+pause 3
+DUMP_ADDR=CODE_START_TEST_ADR
+DUMP_LEN=CODE_SECTOR_32KB/4
+call dump_memory
+
+; Erase 2KB at DATA FLASH_SIZE
+sprintf2 DISP_MESSAGE "05.Erase 2KB data flash area at 0x%08X" DATA_START_TEST_ADR
+call display_message
+sprintf2 cmd "erase %d 0x%x %d" FMC_ID_DFMC DATA_START_TEST_ADR FMC_2KB_ERASE_MODE
+sendln cmd
+pause 3
+
+sprintf2 DISP_MESSAGE "06.Dump memory (0x%08X ~ 0x%08X)" DATA_START_PHY_ADR (DATA_START_PHY_ADR+DATA_SECTOR_2KB-1)
+call display_message
+pause 3
+DUMP_ADDR=DATA_START_PHY_ADR
+DUMP_LEN=DATA_SECTOR_2KB/4
+call dump_memory
+
+; Write predefined 32B data (0x00 ~ 0x1F) at CODE/DATA_START_TEST_ADR into flash write protected area
+; See the result of 'info' command
+sprintf2 DISP_MESSAGE "07.Write 32Byte data (0x00 ~ 0x1F) to code flash write protected area (0x%08X ~ 0x%08X)" CODE_START_TEST_ADR (CODE_START_TEST_ADR+CODE_SECTOR_32KB-1)
+call display_message
+sprintf2 cmd "write %d 0x%x 0xFFFFFFFF" FMC_ID_CFMC CODE_START_TEST_ADR
+sendln cmd
+pause 3
+
+sprintf2 DISP_MESSAGE "08.Dump memory (0x%08X ~ 0x%08X)" CODE_START_TEST_ADR (CODE_START_TEST_ADR+CODE_SECTOR_32KB-1)
+call display_message
+pause 3
+DUMP_ADDR=CODE_START_TEST_ADR
+DUMP_LEN=CODE_SECTOR_32KB/4
+call dump_memory
+
+sprintf2 DISP_MESSAGE "09.Write 32Byte data (0x00 ~ 0x1F) to data flash write protected area (0x%08X ~ 0x%08X)" DATA_START_TEST_ADR (DATA_START_TEST_ADR+DATA_SECTOR_2KB-1)
+call display_message
+sprintf2 cmd "write %d 0x%x 0xFFFFFFFF" FMC_ID_DFMC DATA_START_TEST_ADR
+sendln cmd
+pause 3
+
+sprintf2 DISP_MESSAGE "10.Dump memory (0x%08X ~ 0x%08X)" DATA_START_PHY_ADR (DATA_START_PHY_ADR+DATA_SECTOR_2KB-1)
+call display_message
+pause 3
+DUMP_ADDR=DATA_START_PHY_ADR
+DUMP_LEN=DATA_SECTOR_2KB/4
+call dump_memory
+
+sprintf2 DISP_MESSAGE "End of Flash Test Sequence."
+call display_message
+
+goto finish
+
+return
+
+; Dump specific flash memory
+:dump_memory
+    timeout = 200
+    mpause 30
+    sendln 'cm scu'
+    mpause 100
+    sprintf2 cmd "rmem 0x%x %d" DUMP_ADDR DUMP_LEN 
+    sprintf2 waitstr "0x%08X" (DUMP_ADDR+((DUMP_LEN)*4-4))
+    sendln cmd
+    wait waitstr 
+    mpause 30
+    sendln 'cm fmc'
+    mpause 30
+    return
+
+; Dispaly message
+:display_message
+    sprintf2 dstr '        %s' DISP_MESSAGE
+    dispstr 10 10 dstr
+    send 10
+    mpause 30
+    return
+
+:finish

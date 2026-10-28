@@ -1,0 +1,32 @@
+/**
+ *******************************************************************************
+ * @file        a34m41x_system_setting.c
+ * @author      ABOV R&D Division
+ * @brief       System Setting Source File
+ *
+ * Copyright 2017 ABOV Semiconductor Co.,Ltd. All rights reserved.
+ *
+ * This file is licensed under terms that are found in the LICENSE file
+ * located at Document directory.
+ * If this file is delivered or shared without applicable license terms,
+ * the terms of the BSD-3-Clause license shall be applied.
+ * Reference: https://opensource.org/licenses/BSD-3-Clause
+ ******************************************************************************/
+
+#include "main.h"
+
+#include "a34m41x_scu.h"
+
+void System_Setting_Config(void)
+{
+    struct scu_main_clock_cfg cfg =
+    {
+        .mclk_sel = SCU_CLOCK_HSE,
+        .mclk_div = SCU_MAIN_CLOCK_DIV_NONE,
+        .hclk_div = SCU_AHB_CLOCK_DIV_NONE,
+        .mclk_hz = 8000000,
+    };
+
+    HAL_SCU_UpdateMainClock(&cfg);
+}
+

@@ -1,0 +1,21 @@
+----------------------------------------------------------------------------------------------------------------------------------
+NCDrill File Report For: STK-A34M418-YLN-A.PcbDoc   2021-2-01(¿ù)  ¿ÀÈÄ 4:01:55
+----------------------------------------------------------------------------------------------------------------------------------
+
+Layer Pair : Top Layer, Top to Bottom Layer, Bottom
+ASCII RoundHoles File : STK-A34M418-YLN-A-RoundHoles.TXT
+ASCII SlotHoles File : STK-A34M418-YLN-A-SlotHoles.TXT
+
+Tool       Hole Size               Hole Tolerance               Hole Type       Hole Count   Plated         Tool Travel
+----------------------------------------------------------------------------------------------------------------------------------
+T1      16mil (0.406mm)                                           Round             184       PTH        0.00inch (0.00mm)
+T2      24mil (0.61mm)                                            Round             2         PTH        0.00inch (0.00mm)
+T3      26mil (0.65mm)                                            Slot              2         PTH        0.00inch (0.00mm)
+T4      28mil (0.7mm)                                             Slot              2         PTH        0.00inch (0.00mm)
+T5      36mil (0.914mm)                                           Round             159       PTH        0.00inch (0.00mm)
+T6      40mil (1.016mm)                                           Slot              2         PTH        0.00inch (0.00mm)
+T7      118mil (3mm)                                              Round             4         PTH        0.00inch (0.00mm)
+----------------------------------------------------------------------------------------------------------------------------------
+Totals                                                                              355
+
+Total Processing Time (hh:mm:ss) : 00:00:00

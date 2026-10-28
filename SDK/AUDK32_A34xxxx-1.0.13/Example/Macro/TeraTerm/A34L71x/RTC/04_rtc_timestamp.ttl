@@ -1,0 +1,103 @@
+; A. Description
+;    A list of commands here configures RTC and generates a timestamp interrupt by external trigger signal (RTC_TA input).
+;
+; B. Preparation
+;    Configure RTC_TA pin as a Timestamp trigger signal.
+;
+; C. Prerequisite Example (abov_example_config.h)
+;    1. RTC
+;    2. PCU/GPIO
+;
+; D. Default Port
+;    1. PCU     : PE11 (Output)
+;    2. RTC0    : PC7 (RTC_TA)
+;
+; E. Port Connection
+;    1. PE11 (Output) ----> PC7 (RTC_TA)
+; 
+; For more information, read a user's manual of the target device carefully.
+;
+; RTC0
+; 1. Channel                   : 0 (RTC 0)
+;
+; 2. Clock                     : [ 0 l ]
+;    Source                    : l (LSI40KHz)
+;
+; 3. Config                    : [ 0 i ]
+;    Operation                 : i (Interrupt)
+;
+; 4. Clock(Time/Data)          : [ 0 22 5 4 3 1 1 50 m ] (2022/05/03 Thu PM 01:01:50)
+;    Year                      : 2022
+;    Month                     : 5
+;    Week                      : 4
+;    Day                       : 3
+;    Hour                      : 1
+;    Minute                    : 1
+;    Second                    : 50
+;    Event Period Mode         : m (Every 1 minute)
+;
+; 5. Timestamp                 : [ 0 e f ]
+;    Mode Enable               : e (Enable)
+;    Event Edge Mode           : f (Falling Edge)
+;
+; PCU (PE11)
+; 1. Port Group                : 1 (PCU Port B)
+;
+; 2. Port                      : [ 1 0 o p h ]
+;    Pin Number                : 0
+;    Pin Mode                  : o (Output)
+;    Pin Output Mode           : p (Push-Pull)
+;    Pin Level                 : h (High)
+;
+; 3. Output                    : [ 1 0 l / h ]
+;    Pin Number                : 0
+;    Pin Level                 : l (Low) / h (High)
+;
+; PCU (PC7)
+; 1. Port Group                : 2 (PCU Port C)
+;
+; 2. Port                      : [ 2 7 a 3 ]
+;    Pin Number                : 7
+;    Pin Mode                  : a (Alternative)
+;    Alternative               : 3 (RTC_TAMP1)
+;
+; PCU (PE11)
+sendln 'cm pcu'
+mpause 30
+sendln 'port 4 11 o p h'
+mpause 30
+
+; PCU (PC7)
+sendln 'port 2 7 a 3'
+mpause 30
+
+sendln 'cm rtc'
+mpause 30
+sendln 'uninit 0'
+mpause 30
+sendln 'init 0'
+mpause 30
+sendln 'clk 0 m l 1'
+mpause 30
+sendln 'config 0 i'
+mpause 30
+sendln 'clock 0 22 5 4 3 1 1 50 m'
+mpause 30
+sendln 'start 0'
+mpause 30
+sendln 'timestamp 0 e f'
+mpause 30
+
+sendln 'cm pcu'
+mpause 30
+
+i = 20
+do while i > 0
+    i = i - 1
+    if i%2 = 0 then
+        sendln 'output 4 11 l'
+    else
+        sendln 'output 4 11 h'
+    endif
+    pause 1
+loop

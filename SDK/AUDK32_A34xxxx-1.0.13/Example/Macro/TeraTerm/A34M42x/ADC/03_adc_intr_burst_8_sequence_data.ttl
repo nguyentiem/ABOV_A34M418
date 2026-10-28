@@ -1,0 +1,65 @@
+; A. Description
+;    A list of commands here configures ADC and generates burst capture interrupt.
+;
+; B. Preparation
+;    Connecting target port with a suitable instrument.
+;
+; C. Prerequisite Example (abov_example_config.h)
+;    1. ADC
+;
+; D. Default Port
+;    1. ADC0    : PA0 (AN0)
+;               : PA1 (AN1)
+;               : PA2 (AN2)
+;
+; For more information, read a user's manual of the target device carefully.
+;
+; ADC0
+; 1. Channel                    : 0
+;
+; 2. Clock                      : [ 0 p 64 ]
+;    Source                     : p (Peripheral Clock)
+;    Peripheral Clock Divide    : 64
+;
+; 3. Config                     : [ config 0 i b a 8 0 ]
+;    Operation                  : i (Interrupt)
+;    Mode                       : b (Burst)
+;    Base Trigger Source        : a (ADC Instant Start)
+;    Sequence Count             : 8
+;    Sampling Time              : 0
+;
+; 4. Seq                        : [ 0 a 0 0 ]
+;    Trigger Source             : a (ADC Instant Start)
+;    Sequence Number            : 0
+;    Input Channel              : 0
+;
+; ADC0
+sendln 'cm adc'
+mpause 30
+sendln 'uninit 0'
+mpause 30
+sendln 'init 0'
+mpause 30
+sendln 'clk 0 p 64'
+mpause 30
+sendln 'config 0 i b a 8 0'
+mpause 30
+sendln 'seq 0 a 0 0'
+mpause 30
+sendln 'seq 0 a 1 1'
+mpause 30
+sendln 'seq 0 a 2 2'
+mpause 30
+sendln 'seq 0 a 3 3'
+mpause 30
+sendln 'seq 0 a 4 4'
+mpause 30
+sendln 'seq 0 a 5 5'
+mpause 30
+sendln 'seq 0 a 6 6'
+mpause 30
+sendln 'seq 0 a 7 7'
+mpause 30
+sendln 'start 0'
+pause 2 
+sendln 'dump 0'

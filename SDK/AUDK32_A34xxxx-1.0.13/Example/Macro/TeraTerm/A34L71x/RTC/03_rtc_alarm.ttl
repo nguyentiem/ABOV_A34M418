@@ -1,0 +1,55 @@
+; A. Description
+;    A list of commands here configures RTC and generates a alarm interrupt.
+;
+; B. Preparation
+;    N/A
+;
+; C. Prerequisite Example (abov_example_config.h)
+;    1. RTC
+;
+; For more information, read a user's manual of the target device carefully.
+;
+; RTC0
+; 1. Channel                   : 0 (RTC 0)
+;
+; 2. Clock                     : [ 0 m l 6 ]
+;    Source                    : m (MCCR : Misc Clock)
+;    MCCR Source               : l (LSI : Low Speed Internal Clock - 750KHz)
+;    Source Divide             : 6 
+;
+; 3. Config                    : [ 0 i ]
+;    Operation                 : i (Interrupt)
+;
+; 4. Clock(Time/Data)          : [ 0 22 5 4 3 1 1 50 s ] (2022/05/03 Thu 01:01:50)
+;    Year                      : 2022
+;    Month                     : 5
+;    Week                      : 4
+;    Day                       : 3
+;    Hour                      : 1
+;    Minute                    : 1
+;    Second                    : 50
+;    Event Period Mode         : s (Every 1 second)
+;
+; 5. Alarm                     : [ 0 e s:w:h:r 1 2 ]
+;    Mode Enable               : e (Enable)
+;    Week                      : s:w:h:r (sun:wed:thu:sat)
+;    Hour                      : 1
+;    Minute                    : 2
+;
+sendln 'cm rtc'
+mpause 30
+sendln 'uninit 0'
+mpause 30
+sendln 'init 0'
+mpause 30
+sendln 'clk 0 m l 1'
+mpause 30
+sendln 'config 0 i'
+mpause 30
+sendln 'clock 0 22 5 4 3 1 1 50 s'
+mpause 30
+sendln 'start 0'
+mpause 30
+sendln 'alarm 0 e s:w:h:r 1 2'
+mpause 30
+

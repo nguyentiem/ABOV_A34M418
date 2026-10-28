@@ -1,0 +1,44 @@
+; A. Description
+;    A list of commands here configures RNG module and generates a random number 
+;    and non-maskable ready interrupt.
+;
+; B. Preparation
+;    N/A
+;
+; C. Prerequisite Example (abov_example_config.h)
+;    1. RNG
+;
+; Please, read the User Manual of the specific chip for more details.
+;
+; RNG0
+; 1. Channel                   : 0 (RNG0)
+;
+; 2. Config                    : [ 0 i l h 65535 ]
+;    Operation                 : n (Non Maskable Interrupt)
+;    LFS Clock                 : l (LSI - Low Speed Internal Clock - 500KHz)
+;    CAS Clock                 : h (HSI - High Speed Internal Clock - 32MHz)
+;    Generation Time           : 65535
+;
+; 3. Seed                      : [ 0 0xf0f0f0f0 ]
+;    Seed value                : 0xf0f0f0f0
+
+; 4. Gen                       : [ 0 e ]
+;    Generation Enable         : e (Enable)
+;
+; RNG0
+sendln 'cm rng'
+mpause 30
+sendln 'uninit 0'
+mpause 30
+sendln 'init 0'
+mpause 30
+sendln 'config 0 n l h 65535'
+mpause 30
+sendln 'seed 0 0xf0f0f0f0'
+mpause 30
+sendln 'log on 0'
+mpause 30
+sendln 'gen 0 e'
+pause 10
+sendln 'gen 0 d'
+

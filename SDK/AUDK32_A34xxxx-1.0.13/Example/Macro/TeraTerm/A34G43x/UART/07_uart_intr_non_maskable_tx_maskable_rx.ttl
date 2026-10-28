@@ -1,0 +1,122 @@
+; A. Description
+;    A list of commands here configures UART, and transmits and receives data via UART.
+;
+; B. Preparation
+;    Connecting ports with a suitable instrument should be correct
+;
+; C. Prerequisite Example (abov_example_config.h)
+;    1. UART
+;    2. PCU/GPIO
+;
+; D. Default Port
+;    1. UART3   : PG8 (Transmit)
+;               : PG9 (Receive)
+;    2. UART12  : PD8 (Transmit)
+;               : PD9 (Receive)
+;
+; E. Port Connection
+;    1. PG8 (UART3 Transmit) <----> PD9 (UART12 Receive)
+;    2. PG9 (UART3 Receive)  <----> PD8 (UART12 Transmit)
+;
+; For more information, read a user's manual of the target device carefully.
+;
+; UART3
+; 1. Channel                   : 3 (UART3)
+;
+; 2. CLK                       : [ 3 m m 2 ]
+;    Source                    : m (MCCR : Misc Clock)
+;    MCCR Source               : m (MCLK : Main Clock)
+;    Source Divide             : 2
+;
+; 3. Config                    : [ 3 i 8 o 1 19200 ]
+;    Operation                 : i (Interrupt)
+;    Data Bit                  : 8 (8bit)
+;    Parity                    : o (odd)
+;    Stop Bit                  : 1 (1bit)
+;    Baudrate                  : 19200 bps
+;
+; 4. Data                      : [ 3 8 0xa5 0x5a 0xa5 0x5a 0x05 0x07 0x09 0xa0 ]
+;    Data Length               : 8
+;    Data                      : 0xa5 ... (Hexa and space (delimitor))
+;
+; 5. Tx                        : [ 3 8 ]
+;    Receive Data Length       : 8
+;
+; UART12
+; 1. Channel                   : 12 (UART12)
+;
+; 2. CLK                       : [ 12 m m 2 ]
+;    Source                    : m (MCCR : Misc Clock)
+;    MCCR Source               : m (MCLK : Main Clock)
+;    Source Divide             : 2
+;
+; 3. Config                    : [ 12 n 8 o 1 19200 ]
+;    Operation                 : n (Non Maskable Interrupt)
+;    Data Bit                  : 8 (8bit)
+;    Parity                    : o (odd)
+;    Stop Bit                  : 1 (1bit)
+;    Baudrate                  : 19200 bps
+;
+; 4. Rx                        : [ 12 8 ]
+;    Receive Data Length       : 8
+;
+; PCU (PDx)
+; 1. Port Group                : 3 (PCU Port D)
+;
+; 2. Port                      : [ 3 8 a 1 -pupd p ] [ 3 9 a 1 -pupd p ]
+;    Pin Number                : 8 / 9 
+;    Pin Mode                  : a (Alternative)
+;    Alternative               : 1 (RX/TX)
+;    Pull-up/down              : p (Pull-up)
+;
+; PCU (PGx)
+; 1. Port Group                : 6 (PCU Port G)
+;
+; 2. Port                      : [ 6 8 a 1 -pupd p ] [ 6 9 a 1 -pupd p ]
+;    Pin Number                : 8 / 9 
+;    Pin Mode                  : a (Alternative)
+;    Alternative               : 1 (RX/TX)
+;    Pull-up/down              : p (Pull-up)
+;
+; PCU (PDx)
+sendln 'cm pcu'
+mpause 30
+sendln 'port 3 8 a 1 -pupd p'
+mpause 30
+sendln 'port 3 9 a 1 -pupd p'
+mpause 30
+
+; PCU (PGx)
+sendln 'cm pcu'
+mpause 30
+sendln 'port 6 8 a 1 -pupd p'
+mpause 30
+sendln 'port 6 9 a 1 -pupd p'
+mpause 30
+
+; UART12
+sendln 'cm uart'
+mpause 30
+sendln 'uninit 12'
+mpause 30
+sendln 'init 12'
+mpause 30
+sendln 'clk 12 m m 2'
+mpause 30
+sendln 'config 12 n 8 o 1 19200'
+mpause 30
+sendln 'rx 12 8'
+
+; UART3
+mpause 30
+sendln 'uninit 3'
+mpause 30
+sendln 'init 3'
+mpause 30
+sendln 'clk 3 m m 2'
+mpause 30
+sendln 'config 3 i 8 o 1 19200'
+mpause 30
+sendln 'data 3 8 0xa5 0x5a 0xa5 0x5a 0x05 0x07 0x09 0xa0'
+mpause 30
+sendln 'tx 3 8'

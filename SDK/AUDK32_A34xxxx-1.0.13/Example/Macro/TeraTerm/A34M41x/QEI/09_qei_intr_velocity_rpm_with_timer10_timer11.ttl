@@ -1,0 +1,180 @@
+; A. Description
+;    A list of commands here configures QEI module and generates velocity zero interrupt, and display RPM based on velocity capture and velocity timer value.
+;
+; B. Preparation
+;    Connecting target port with a suitable instrument.
+;
+; C. Prerequisite Example (abov_example_config.h)
+;    1. QEI
+;    2. Timer1
+;    3. PCU/GPIO
+;
+; D. Default Port
+;    1. QEI     : PE7 (QEI0_A)
+;               : PE8 (QEI0_B)
+;               : PE9 (QEI0_IDX)
+;    2. Timer10 : PE11 (T0IO)
+;    3. Timer11 : PE12 (T1IO)
+;
+; E. Port Connection 
+;    1. PE11 (T0IO) ----> PE7 (QEI0_A)
+;       PE12 (T1IO) ----> PE8 (QEI0_B) 
+;
+; Please, read the User Manual of the specific chip for more details.
+;
+; QEI0
+; 1. Channel                    : 0 (QEI0)
+;
+; 2. Config (cfg)                 : [ 0 i 0x01 q b m d 0xFFFFF ]
+;    Operation                    : i (Interrupt)
+;    Interrupt Enable             : 0x01 (Index Pulse Rising Edge)
+;    Signal Mode                  : q (Quadrature)
+;    Capture Edge Mode            : b (Phase-A & Phase-B Edge)
+;    Counter Reset                : m (Maximum Reset)
+;    Index Count by Ph-A and Ph-B : d (disable)
+;    Counter Maximum Value        : 0xFFFFF
+; 
+; 3. Velocity Config (velcfg)     : [ 0 e e 0xFFFF 0xFFFF 0 ]
+;    Velocity Enable              : e (Enable)
+;    Interrupt Enable             : e (Enable)
+;    Timer Reload Value           : 0xFFFF
+;    Timer Initial Value          : 0xFFFF
+;    Compare Value                : 0
+;
+; Timer10
+; 1. Channel                    : 0 (Timer10)
+;
+; 2. Clock                      : [ 0 m h 10 100 ]
+;    Source                     : m (MCCR : Misc Clock)
+;    MCCR Source                : h (HSI : High Speed Internal Clock - 32MHz)
+;    Source Divide              : 10
+;    Timer1 Pre-Divide          : 100 (MCCR Clock / 10) / 100
+;
+; 3. Config                     : [ 0 i p l 16 16 -io o ]
+;    Operation                  : i (Interrupt)
+;    Mode                       : p (Period)
+;    Output Port Polarity       : h (High)
+;    A Data                     : 16
+;    B Data                     : 16
+;    Port In/Out (-io)          : o (Output)
+;
+; Timer11
+; 1. Channel                    : 1 (Timer11)
+;
+; 2. Clock                      : [ 1 m h 10 100 ]
+;    Source                     : m (MCCR : Misc Clock)
+;    MCCR Source                : h (HSI : High Speed Internal Clock - 32MHz)
+;    Source Divide              : 10
+;    Timer1 Pre-Divide          : 100 (MCCR Clock / 10) / 100
+;
+; 3. Config                     : [ 1 i p l 16 16 -io o ]
+;    Operation                  : i (Interrupt)
+;    Mode                       : p (Period)
+;    Output Port Polarity       : h (High)
+;    A Data                     : 16
+;    B Data                     : 16
+;    Port In/Out (-io)          : o (Output)
+;
+; PCU (PEx)
+; 1. Port Group                   : 4 (PCU Port E)
+;
+; 2. Port                         : [ 4 7 a 2 ] [ 4 8 a 2 ] [ 4 9 a 2 ]
+;    Pin Number                   : 7 / 8 / 9
+;    Pin Mode                     : a (Alternative)
+;    Alternative                  : 2 (QEI0_A / QEI0_B / QEI0_IDX)
+;
+; PCU (PEx)
+; 1. Port Group                   : 4 (PCU Port E)
+;
+; 2. Port                         : [ 4 11 a 2 ] [ 4 12 a 2 ]
+;    Pin Number                   : 11 / 12
+;    Pin Mode                     : a (Alternative)
+;    Alternative                  : 2 (T0IO / T1IO)
+;
+; - Simulation RPM
+;   Resolution (Pulses Per Revolution)  : 2048
+;   Timer10 Period                      : 1.016 msec
+;   Total Pulses of 1 second by Timer10 : 985
+;
+;          985 * 60
+;   RPM = ---------- = 28.857 (28)
+;            2048
+;
+; - RPM by Velocity 
+;   Resolution (Pulses Per Revolution)            : 2048
+;   Load (Velocity Timer Value)                   : 0xFFFF
+;   PCLK                                          : 32MHz
+;   Edges (Capture Edge Mode : b (Ph-A and Ph-B)) : 4
+;   Speed (Capture Value by Timer zero)           : 8 
+;   
+;         PCLK * Speed * 60     32000000 * 8 * 60
+;   RPM = ------------------ = ------------------- = 28.61 (28)
+;         Load * PPR * Edges     65535 * 2048 * 4
+;  
+
+; PCU (PE7)
+sendln 'cm pcu'
+mpause 30
+sendln 'port 4 7 a 2 -pupd p'
+mpause 30
+
+; PCU (PE8)
+sendln 'port 4 8 a 2 -pupd p'
+mpause 30
+
+; PCU (PE9)
+sendln 'port 4 9 a 2 -pupd p'
+mpause 30
+
+; PCU (PE11)
+sendln 'port 4 11 a 2'
+mpause 30
+
+; PCU (PE12)
+sendln 'port 4 12 a 2'
+mpause 30
+
+; Timer10
+sendln 'cm timer1'
+mpause 30
+sendln 'uninit 0'
+mpause 30
+sendln 'init 0'
+mpause 30
+sendln 'clk 0 m h 10 100'
+mpause 30
+sendln 'config 0 i p l 16 16 -io o' 
+mpause 30
+sendln 'log off'
+mpause 30
+
+; Timer11
+mpause 30
+sendln 'uninit 1'
+mpause 30
+sendln 'init 1'
+mpause 30
+sendln 'clk 1 m h 10 100'
+mpause 30
+sendln 'config 1 i p l 16 16 -io o' 
+mpause 30
+sendln 'start 0'
+; Under 50 msec is to generate a phase difference.
+mpause 50 
+sendln 'start 1'
+mpause 30
+
+; QEI0
+sendln 'cm qei'
+mpause 30
+sendln 'uninit 0'
+mpause 30
+sendln 'init 0'
+mpause 30
+sendln 'cfg 0 i 0x00 q b m d 0xFFFFF' 
+mpause 30
+sendln 'velcfg 0 e e 0xFFFF 0xFFFF 0'
+mpause 30
+sendln 'log rpm 2000'
+mpause 30
+sendln 'start 0' 

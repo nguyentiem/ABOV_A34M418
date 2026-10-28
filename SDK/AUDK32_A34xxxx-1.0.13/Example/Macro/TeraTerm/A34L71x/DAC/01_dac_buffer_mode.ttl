@@ -1,0 +1,198 @@
+; A. Description
+;    A list of commands here configures DAC and generates single capture interrupt by Timer10 and ADC.
+;
+; B. Preparation
+;    Connecting target port with a suitable instrument.
+; 
+; C. Prerequisite Example (abov_example_config.h)
+;    1. ADC
+;    2. Timer1
+;    3. DAC
+;    4. PCU/GPIO
+;
+; D. Default Port
+;    1. ADC0    : PA0 (AN0)
+;    2. DAC0    : PA7 (DAO)
+;
+; E. Port Connection
+;    1. PA7 (DAC0 DAO) ---> PA0 (AN0)
+;
+; F.Note 
+;    1. Modify the line '#define __ROM_SIZE 0x00008000' to '#define __ROM_SIZE 0x00010000 in the ac5_a31g21x.sct file.
+;
+; For more information, read a user's manual of the target device carefully.
+;
+; ADC0
+; 1. Channel                    : 0
+;
+; 2. Clock                      : [ 0 p 63 ]
+;    Source                     : p (Periperhal Clock)
+;    Peripheral Clock Divide    : 63 (Divide + 1)
+;
+; 3. Config                     : [ config 0 i s 1 1 0 ]
+;    Operation                  : i (Interrupt)
+;    Mode                       : s (Single)
+;    Base Trigger Source        : 1 (Timer1)
+;    Sequence Count             : 1
+;    Sampling Time              : 0
+;
+; 4. Seq                        : [ 0 1 0 0 0 ]
+;    Trigger Source             : 1 (Timer1)
+;    Trigger Source Number      : 0 (Timer10)
+;    Sequence Number            : 0
+;    Input Channel              : 0
+;    Sampling Time              : 0
+;
+; Timer10
+; 1. Channel                    : 0 (Timer10)
+;
+; 2. Clock                      : [ 0 m h 10 1000 ]
+;    Source                     : m (MCCR : Misc Clock)
+;    MCCR Source                : h (HSI : High Speed Internal Clock - 32MHz)
+;    Source Divide              : 10
+;    Timer1 Pre-Divide          : 1000 (MCCR Clock / 10) / 1000
+;
+; 3. Config                     : [ 0 i p h 1600 1600 ]
+;    Operation                  : i (Interrupt)
+;    Mode                       : p (Period)
+;    Output Port Polarity       : h (High)
+;    A Data                     : 1600
+;    B Data                     : 1600
+;
+; DAC0
+; 1. Config                     : [ 0 p m ign i c -port 0x01 -pg p 0 -buf u]
+;    Operation                  : p (Polling)
+;    Mode                       : m (Manual)
+;    Internal Test Procedure    : ign (Ignore)
+;    Reference Level            : i (Internal VDD)
+;    Re-load reference          : c (Constant)
+;    Output Port                : 0x01 (DAC0 DAO)
+;    Programmable Gain          : p (Positive)
+;    Programmable Gain Level    : 0 (0dB)
+;    Buffer Mode                : u (Buffer mode)
+;
+; PCU (PA7)
+; 1. Port Group                 : 0 (PCU Port A)
+;
+; 2. Port                       : [ 0 7 a 3 ]
+;    Pin Number                 : 7
+;    Pin Mode                   : a (Alternative)
+;    Alternative                : 3 (DAO)
+; 
+; PCU (PA0)
+; 1. Port Group                 : 0 (PCU Port A)
+;
+; 2. Port                       : [ 0 0 a 7 ]
+;    Pin Number                 : 0
+;    Pin Mode                   : a (Alternative)
+;    Alternative                : 7 (AN0)
+;
+; PCU (PA7)
+sendln 'cm pcu'
+mpause 30
+sendln 'port 0 7 a 7'
+mpause 30
+
+; PCU (PA0)
+sendln 'port 0 0 a 7'
+mpause 30
+
+; VREFBUF
+sendln 'cm vrefbuf'
+mpause 30
+sendln 'uninit 0'
+mpause 30
+sendln 'init 0'
+mpause 30
+sendln 'config 0 p v 64000 1'
+mpause 100
+
+; Timer10
+sendln 'cm timer1'
+mpause 30
+sendln 'log off'
+mpause 30
+sendln 'uninit 0'
+mpause 30
+sendln 'init 0'
+mpause 30
+sendln 'clk 0 m h 10 1000'
+mpause 30
+sendln 'config 0 i p h 1600 1600'
+mpause 30
+sendln 'adctrg 0 e n'
+mpause 30
+
+; ADC0
+sendln 'cm adc'
+mpause 30
+sendln 'uninit 0'
+mpause 30
+sendln 'init 0'
+mpause 30
+sendln 'clk 0 p 64'
+mpause 30
+sendln 'config 0 i s 1 1 0'
+mpause 30
+sendln 'seq 0 1 0 0 0'
+mpause 30
+sendln 'log off'
+mpause 30
+
+; Timer10
+sendln 'cm timer1'
+mpause 30
+sendln 'start 0'
+mpause 30
+
+; DAC0
+sendln 'cm dac'
+mpause 30
+sendln 'uninit 0'
+mpause 30
+sendln 'init 0'
+mpause 30
+sendln 'config 0 p m ign i c -pg p 6 -buf e'
+mpause 30
+sendln 'data 0 0x0'
+mpause 30
+sendln 'start 0'
+mpause 30
+
+; ADC0
+sendln 'cm adc'
+mpause 30
+sendln 'start 0'
+mpause 30
+
+; DAC0
+sendln 'cm dac'
+mpause 30
+
+i = 0
+do while i < 40
+    i = i + 1
+    sprintf2 cmd "data 0 %d" i
+    sendln cmd
+    mpause 500
+loop 
+
+i = 40
+do while i > 0
+    i = i - 1
+    sprintf2 cmd "data 0 %d" i
+    sendln cmd
+    mpause 500
+loop 
+sendln 'stop 0'
+mpause 30
+
+; Timer10
+sendln 'cm timer1'
+mpause 30
+sendln 'stop 0'
+mpause 30
+
+sendln 'cm adc'
+mpause 30
+sendln 'dump 0'

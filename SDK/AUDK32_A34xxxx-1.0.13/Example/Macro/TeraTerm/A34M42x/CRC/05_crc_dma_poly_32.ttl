@@ -1,0 +1,44 @@
+; A. Description
+;    A list of commands here configures CRC module and generates a crc-32 result computed from specific data, and uses an interrupt dma mode.
+;
+; B. Preparation
+;    N/A
+;
+; C. Prerequisite Example (abov_example_config.h)
+;    1. CRC 
+;
+; D. Note
+;    Should use Online CRC calculation to compare the result.
+;    Link : http://www.ghsi.de/pages/subpages/Online%20CRC%20Calculation/
+;
+; Please, read the User Manual of the specific chip for more details.
+;
+; CRC0
+; 1. Channel                   : 0 (CRC0)
+;
+; 2. Config                    : [ 0 d c w m ]
+;    Operation                 : d (Interrupt DMA)
+;    Mode                      : c (CRC)
+;    CRC Poly                  : w (CRC-32)
+;    First-In Bit              : m (MSB)
+;
+; 3. Data                      : [ 0 7 0x30 0x31 0x32 0x33 0x34 0x35 0x36 ]
+;    Data Length               : 7
+;    Data                      : 0x30 ... (Hexa and space (delimitor))
+;
+; CRC-32 Poly       : x^32 + x^26 + x^23 + x^22 + x^16 + x^12 + x^11 + x^10 + x^8 + x^7 + x^5 + x^4 + x^2 + x^1 + x^0
+; Result of CRC-32  : 0xccdcd51e
+;
+; CRC0
+sendln 'cm crc'
+mpause 30
+sendln 'uninit 0'
+mpause 30
+sendln 'init 0'
+mpause 30
+sendln 'config 0 d c w m'
+mpause 30
+sendln 'data 0 7 0x30 0x31 0x32 0x33 0x34 0x35 0x36'
+mpause 40
+sendln 'cmpt 0 7'
+

@@ -1,0 +1,73 @@
+; A. Description
+;    A list of commands here configures AES module and generates encrypted data (ECB : electronic codebook).
+;
+; B. Preparation
+;    N/A
+;
+; C. Prerequisite Example (abov_example_config.h)
+;    1. AES
+;
+; Please, read the User Manual of the specific chip for more details.
+;
+; AES0
+; 1. Channel                   : 0 (AES0)
+;
+; 2. Config                    : [ 0 n e s s ] [ 0 n d s s ]
+;    Operation                 : n (Non Maskable Interrupt)
+;    Cipher Mode               : e (Encryption) / d (Decryption)
+;    In Fifo Alignment         : s (swap word)
+;    Out Fifo Alignment        : s (swap word)
+;
+; 3. Key                       : [ 0 0x00000000 0x00000001 0x00000002 0x00000003 ]
+;
+; 4. Buf                       : [ 0 0 4 0x00000000 0x00000001 0x00000002 0x00000003 ]
+;                              : [ 0 4 4 0x00000004 0x00000005 0x00000006 0x00000007 ]
+;                              : [ 0 8 4 0x00000008 0x00000009 0x0000000a 0x0000000b ]
+;                              : [ 0 12 4 0x0000000c 0x0000000d 0x0000000e 0x0000000f ]
+;                              : [ 0 16 4 0x00000000 0x00000001 0x00000002 0x00000003 ]
+;                              : [ 0 20 4 0x00000004 0x00000005 0x00000006 0x00000007 ]
+;                              : [ 0 24 4 0x00000008 0x00000009 0x0000000a 0x0000000b ]
+;                              : [ 0 28 4 0x0000000c 0x0000000d 0x0000000e 0x0000000f ]
+;    Start Buffer Position     : 0 / 4 / 8 / 12 / 16 / 20 / 24 / 28
+;    Data Length               : 4 / 4 / 4 / 4 / 4 / 4 / 4 / 4
+;
+; 5. Cmpt                      : [ 0 32 ] [ 0 32 -cp]
+;    Computation Buffer Length : 32
+;    Copy out buffer to in buffer : -cp
+;
+; AES0
+sendln 'cm aes'
+mpause 30
+sendln 'uninit 0'
+mpause 30
+sendln 'init 0'
+mpause 30
+sendln 'config 0 n e s s'
+mpause 30
+sendln 'key 0 0x00000000 0x00000001 0x00000002 0x00000003'
+mpause 30
+sendln 'buf 0 0 4 0x00000000 0x00000001 0x00000002 0x00000003'
+mpause 30
+sendln 'buf 0 4 4 0x00000004 0x00000005 0x00000006 0x00000007'
+mpause 30
+sendln 'buf 0 8 4 0x00000008 0x00000009 0x0000000A 0x0000000B'
+mpause 30
+sendln 'buf 0 12 4 0x0000000C 0x0000000D 0x0000000E 0x0000000F'
+mpause 30
+sendln 'buf 0 16 4 0x00000000 0x00000001 0x00000002 0x00000003'
+mpause 30
+sendln 'buf 0 20 4 0x00000004 0x00000005 0x00000006 0x00000007'
+mpause 30
+sendln 'buf 0 24 4 0x00000008 0x00000009 0x0000000a 0x0000000b'
+mpause 30
+sendln 'buf 0 28 4 0x0000000c 0x0000000d 0x0000000e 0x0000000f'
+mpause 30
+sendln 'cmpt 0 32'
+pause 1
+sendln 'dump'
+pause 2
+sendln 'config 0 n d s s'
+mpause 30
+sendln 'cmpt 0 32 -cp'
+pause 1
+sendln 'dump'

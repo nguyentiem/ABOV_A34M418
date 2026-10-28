@@ -1,0 +1,43 @@
+# A. Description
+#    A list of commands here configures SCU and generates an internal soft reset.
+#
+# B. Preparation
+#    N/A
+#
+# C. Prerequisite Example (abov_example_config.h)
+#    N/A
+#
+# For more information, read a user's manual of the target device carefully.
+#
+# SCU
+# 1. rsten             : [ s e ]
+#    Reset Source      : s (Software)
+#    Enable            : e (Enable)
+#
+# 2. reset             : [ N/A ]
+#
+# SCU
+send ""
+
+send "cm scu"
+expect {
+    "<SCU> # "
+    break
+    timeout 5 goto end
+}
+
+send "rsten s e"
+expect {
+    "<SCU> # "
+    break
+    timeout 5 goto end
+}
+
+send "reset"
+expect {
+    "<SCU> # "
+    break
+    timeout 5 goto end
+}
+
+end:

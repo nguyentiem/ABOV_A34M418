@@ -1,0 +1,109 @@
+; A. Description
+;    A list of commands here configures timer1 and generates a capture interrupt.
+;
+; B. Preparation
+;    Connecting target port with a suitable instrument.
+;
+; C. Prerequisite Example (abov_example_config.h)
+;    1. Timer1
+;    2. PCU/GPIO
+;
+; D. Default Port
+;    1. Timer11 : PA5 (Output/Capture Input/External Clock Input)
+;    2. Timer12 : PD12 (Output/Capture Input/External Clock Input)
+;
+; E. Port Connection
+;    1. PA5 (Timer11 Output) ----> PD12 (Timer12 Capture Input)
+;
+; For more information, read a user's manual of the target device carefully.
+;
+; Timer12
+; 1. Channel                   : 2 (Timer12)
+;
+; 2. Clock                     : [ 2 m h 10 1000 ]
+;    Source                    : m (MCCR : Misc Clock)
+;    MCCR Source               : h (HSI : High Speed Internal Clock - 32MHz)
+;    Source Divide             : 10 
+;    Timer1 Pre-Divide         : 1000 (MCCR Clock / 10) / 1000
+;
+; 3. Config                    : [ 2 i c b h 0 0 ]
+;    Operation                 : i (Interrupt)
+;    Mode                      : c (Capture)
+;    Capture Egde              : b (Both)
+;    Output Port Polarity      : h (High)
+;    A Data                    : 0
+;    B Data                    : 0
+;
+; Timer11
+; 1. Channel                   : 1 (Timer11)
+;
+; 2. Clock                     : [ 1 m h 10 1000 ]
+;    Source                    : m (MCCR : Misc Clock)
+;    MCCR Source               : h (HSI : High Speed Internal Clock - 32MHz)
+;    Source Divide             : 10 
+;    Timer1 Pre-Divide         : 1000 (MCCR Clock / 10) / 1000
+;
+; 3. Config                    : [ 1 i p h 3200 3200 -io o ]
+;    Operation                 : i (Interrupt)
+;    Mode                      : p (Period)
+;    Output Port Polarity      : h (High)
+;    A Data                    : 3200
+;    B Data                    : 3200
+;    Port In/Out (-io)         : o (Output)
+;
+; PCU (PA5) for Timer11
+; 1. Port Group                   : 0 (PCU Port A)
+;
+; 2. Port                         : [ 0 5 a 2 ]
+;    Pin Number                   : 5
+;    Pin Mode                     : a (Alternative)
+;    Alternative                  : 2 (T1IO)
+;
+; PCU (PD12) for Timer12
+; 1. Port Group                   : 3 (PCU Port D)
+;
+; 2. Port                         : [ 3 12 a 2 ]
+;    Pin Number                   : 12
+;    Pin Mode                     : a (Alternative)
+;    Alternative                  : 2 (T0IO)
+
+
+; PCU (PA5)
+sendln 'cm pcu'
+mpause 30
+sendln 'port 0 5 a 2'
+mpause 30
+
+; PCU (PD12)
+sendln 'cm pcu'
+mpause 30
+sendln 'port 3 12 a 2'
+mpause 30
+
+; Timer11
+sendln 'cm timer1'
+mpause 30
+sendln 'uninit 1'
+mpause 30
+sendln 'init 1'
+mpause 30
+sendln 'clk 1 m h 10 1000'
+mpause 30
+sendln 'config 1 i p h 3200 3200 -io o'
+mpause 30
+sendln 'start 1'
+mpause 30
+
+; Timer12
+sendln 'uninit 2'
+mpause 30
+sendln 'init 2'
+mpause 30
+sendln 'clk 2 m h 10 1000'
+mpause 30
+sendln 'config 2 i c b h 0 0'
+mpause 30
+sendln 'log on'
+mpause 30
+sendln 'start 2'
+
